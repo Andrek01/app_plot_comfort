@@ -27,7 +27,17 @@ function GetSeriesItems()
     }
     f.send(null);
 }
-
+function SetSelectItem()
+{
+	$.each(mySerieItems, function(idx, myItem){
+    modeslist += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
+	})
+  
+   $('#apMode*').append(modeslist).val('avg').selectmenu('refresh');
+  
+	
+	
+}
 
 //****************************************
 function selectChanged(myObj)
@@ -49,8 +59,10 @@ function SetupPage(event, ui)
 {
 	// source was for different menu styles and is not needed any more
 	// can be used to display config menus for more items
-	
-	GetSeriesItems();
+  
+  GetSeriesItems();
+  SetSelectItem();
+  
   myDate= new Date()
   document.getElementById("StartDate").value= myDate.toJSON().slice(0, 4) +'-01-01'
   document.getElementById("EndDate").value= myDate.toJSON().slice(0, 10);

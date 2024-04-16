@@ -42,7 +42,7 @@
     .ui-radio{font-size:0.8em;}     <!-- AndreK -->>
     <!--AndreK-->
     
-    .StreamButton {
+    .FctButton {
       width     : 50px !important;
       display   : inline !important;
       font-size : small !important;
@@ -95,8 +95,9 @@
 		set sources = {
 			'glb_1': 'Time-Axis / Source',
 			'glb_2': 'Y-Axis',
-      'glb_3': 'Chart-Options / Stacking',
-      'glb_4': 'Set-Management'
+			'glb_3': 'Items',
+			'glb_4': 'Options / Stacking',
+			'glb_5': 'Set-Management'
 		}
 		%}
   <div data-role="tabs" id="apSource">
@@ -108,7 +109,7 @@
 				</ul>
 			</div>
 			<hr>
-		    
+	{% set source = "1"	%}
     <!-- Start - Tab One - Time-Axis-Settings -->
 		<div id="glb_tab_glb_1">
 			<form class="configform" style="min-height:400px;">
@@ -212,14 +213,14 @@
             </tr>
             <tr>
               <td style="text-align:center">1</td>
-              <td><input id="apYmin1"/></td>
-              <td><input id="apYmax1"/></td>
-              <td><select id="apYpos1" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
-              <td><select id="apYtype1"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-              <td><input id="apYunit1"/></td>
+              <td><input id="apYmin{{Source}}"/></td>
+              <td><input id="apYmax{{Source}}"/></td>
+              <td><select id="apYpos{{Source}}" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
+              <td><select id="apYtype{{Source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
+              <td><input id="apYunit{{Source}}"/></td>
               <td>
                 <div class="tooltip">
-                  <button id="del_Streams-{id}" class="StreamButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
+                  <button id="del_Y-Axis-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
                   <span class="tooltiptext">remove Axis</span>
                 </div>
               </td>
@@ -265,20 +266,99 @@
     -->
     </div>
     <!-- End - Tab Two - Y-Axis-Settings -->
-    <!-- Start - Tab Three - ChartOptions -->
+	<!-- Start - Tab Three - Items -->
 		<div id="glb_tab_glb_3">
+		<div id={id} class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a">
+			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
+			<form class="configform" style="min-height:400px;">
+				<table style="widht:100%;">
+					<tr>
+					  <th style = "width:14%; text-align:center;">Item</th>              
+					  <th style = "width:14%; text-align:center;">DB Mode</th>
+					  <th style = "width:14%; text-align:center;">Count</th>
+					  <th style = "width:14%; text-align:center;">Series type</th>
+					  <th style = "width:14%; text-align:center;">Color</th>
+					  <th style = "width:14%; text-align:center;">Y-Axis</th>
+					  <th style = "width:16%; text-align:center;">Fct</th>
+					</tr>
+					<tr>
+					  <td><select id="apItem{{source}}" style="font-size:0.8em;"></select></td>
+					  <td><select id="apMode{{source}}" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
+					  <td><input id="apCount{{source}}"/></td>
+					  <td><select id="apExposure{{source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
+					  <td><input id="apColor{{source}}"/></td>
+					  <td><select id="apAssign{{source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
+					  <td>
+						<div class="tooltip">
+						  <button id="del_Item-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
+						  <span class="tooltiptext">remove Item</span>
+						</div>
+					  </td>
+					</tr>
+			  </table>
+				<!--
+				<fieldset>
+					<div class="ui-field-contain">
+						<label for="apItem{{source}}">Item(s)</label>
+						<input id="apItem{{source}}"/>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apMode{{source}}"> DB mode</label>
+						<select id="apMode{{source}}">
+						</select>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apCount">Count(s)</label>
+						<input id="apCount{{source}}"/>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apExposure{{source}}">Series type(s)</label>
+						<input id="apExposure{{source}}"/>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apColor{{source}}">Color(s)</label>
+						<input id="apColor{{source}}"/>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apAssign{{source}}">Y axis no(s).</label>
+						<input id="apAssign{{source}}"/>
+					</div>
+							<div class="ui-field-contain">
+						<label for="apStacking{{source}}">Stacking(s)</label>
+						<input id="apStacking{{source}}"/>
+					</div>
+					<div class="ui-field-contain">
+						<label for="apStacks{{source}}">Stack(s).</label>
+						<input id="apStacks{{source}}"/>
+					</div>        
+				</fieldset>
+				-->
+			  </form>
+			</div>
+    </div>
+    <!-- End - Tab Three - Items -->
+    <!-- Start - Tab Four - ChartOptions -->
+		<div id="glb_tab_glb_4">
 			<form class="configform" style="min-height:400px;">
 				<fieldset>
-        <div class="ui-field-contain">
-          <label for="apChartopts">Chart options</label>
-          <input id="apChartopts"/>
-        </div>
-        </fieldset>
-      </form>
+				<div class="ui-field-contain">
+				  <label for="apChartopts">Chart options</label>
+				  <input id="apChartopts"/>
+				</div>
+				<div class="ui-field-contain">
+					<label for="apStacking{{source}}">Stacking(s)</label>
+					<input id="apStacking{{source}}"/>
+				</div>
+				<div class="ui-field-contain">
+					<label for="apStacks{{source}}">Stack(s).</label>
+					<input id="apStacks{{source}}"/>
+				</div>
+				</fieldset>
+			</form>
     </div>
-    <!-- End - Tab Three - ChartOptions -->
-    <!-- Start - Tab Four - Set-Management -->
-		<div id="glb_tab_glb_4">
+    <!-- End - Tab Four - ChartOptions -->
+    <!-- Start - Tab Five - Set-Management -->
+		<div id="glb_tab_glb_5">
 			<form class="configform" style="min-height:400px;">
 				<fieldset>
         <div class="ui-field-contain" style="width:100%;">
@@ -292,7 +372,7 @@
         </fieldset>
       </form>
     </div>
-    <!-- End - Tab Four - Set-Management -->
+    <!-- End - Tab Five - Set-Management -->
     
 	<div class= "apdisplay">
     <!--
@@ -360,14 +440,7 @@
 						<label for="apAssign{{source}}">Y axis no(s).</label>
 						<input id="apAssign{{source}}"/>
 					</div>
-							<div class="ui-field-contain">
-						<label for="apStacking{{source}}">Stacking(s)</label>
-						<input id="apStacking{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apStacks{{source}}">Stack(s).</label>
-						<input id="apStacks{{source}}"/>
-					</div>
+					
 				</form>
 			</div>
 		{% endfor %}
