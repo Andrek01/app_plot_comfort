@@ -42,6 +42,9 @@
     .ui-radio{font-size:0.8em;}     <!-- AndreK -->>
     <!--AndreK-->
     
+	.apColorButton {
+	   opacity : 1 !important;
+	 }
     .FctButton {
       width     : 50px !important;
       display   : inline !important;
@@ -90,7 +93,7 @@
 		<h3 style="padding: 40px 0 8px 0;">Plot Analyser Comfort</h3>
 	</div>
 
-	<h2>Global Plot Settings:</h2>
+	<h2>Plot Settings:</h2>
   {%
 		set sources = {
 			'glb_1': 'Time-Axis / Source',
@@ -115,8 +118,8 @@
 			<form class="configform" style="min-height:400px;">
 				<fieldset>
 					<div class="ui-field-contain" style="width:100%;">
-            <label for="apDataSource">Source (DB or Item)</label>
-            <select id="apDataSource"><option value="database">Database</option><option value="item">Item</option></select>
+            <label for="apDataSource">Source</label>
+            <select id="apDataSource" data-native-menu="false"><option value="database">Database</option><option value="item">Item</option></select>
           </div>
         <table style="width:100%;">
           <tr style="height:20px">
@@ -215,8 +218,8 @@
               <td style="text-align:center">1</td>
               <td><input id="apYmin{{Source}}"/></td>
               <td><input id="apYmax{{Source}}"/></td>
-              <td><select id="apYpos{{Source}}" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
-              <td><select id="apYtype{{Source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
+              <td><select id="apYpos{{Source}}" data-native-menu="false" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
+              <td><select id="apYtype{{Source}}" data-native-menu="false"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
               <td><input id="apYunit{{Source}}"/></td>
               <td>
                 <div class="tooltip">
@@ -268,26 +271,35 @@
     <!-- End - Tab Two - Y-Axis-Settings -->
 	<!-- Start - Tab Three - Items -->
 		<div id="glb_tab_glb_3">
-		<div id={id} class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a">
+		<form class="configform" style="min-height:400px;max-height:400px;overflow-y:scroll">
+		<div id="itemsetting{{source}}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
 			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
-			<form class="configform" style="min-height:400px;">
-				<table style="widht:100%;">
+				<table style="width:100%;">
 					<tr>
-					  <th style = "width:14%; text-align:center;">Item</th>              
-					  <th style = "width:14%; text-align:center;">DB Mode</th>
-					  <th style = "width:14%; text-align:center;">Count</th>
-					  <th style = "width:14%; text-align:center;">Series type</th>
-					  <th style = "width:14%; text-align:center;">Color</th>
-					  <th style = "width:14%; text-align:center;">Y-Axis</th>
-					  <th style = "width:16%; text-align:center;">Fct</th>
-					</tr>
-					<tr>
-					  <td><select id="apItem{{source}}" style="font-size:0.8em;"></select></td>
-					  <td><select id="apMode{{source}}" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select></td>
-					  <td><input id="apCount{{source}}"/></td>
-					  <td><select id="apExposure{{source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-					  <td><input id="apColor{{source}}"/></td>
-					  <td><select id="apAssign{{source}}"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
+					  <td style = "width:10%;">Item</td>
+					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;"></select></td>
+					  <td style = "width:15%;">DB-Mode</td>
+					  <td style = "width:25%;" ><select id="apMode{{source}}" data-native-menu="false" style="font-size:0.8em;"></select></td>
+					  </tr>
+					  <tr>
+					  </table>
+					  <table>
+					  <td style = "width:15%;">Count</td>
+					  <td style = "width:10%;"><input id="apCount{{source}}"/></td>
+					  <td style = "width:20%;text-align:center;">Series Type</td>
+					  <td style = "width:30%;"><select id="apExposure{{source}}" data-native-menu="false"></select></td>
+					  <td style = "width:10%;text-align:center;">Color</td>
+					  <td style = "width:15%;">
+						<input class="apColorButton" id="apColor-{{source}}" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">
+						<div id="myColorPicker-apColor-{{source}}"> </div>
+					  </td>
+					  </tr>
+					  <tr>
+					  <td>Y-Axis</td>
+					  <td><select id="apAssign{{source}}" data-native-menu="false"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
 					  <td>
 						<div class="tooltip">
 						  <button id="del_Item-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
@@ -296,45 +308,84 @@
 					  </td>
 					</tr>
 			  </table>
-				<!--
-				<fieldset>
-					<div class="ui-field-contain">
-						<label for="apItem{{source}}">Item(s)</label>
-						<input id="apItem{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apMode{{source}}"> DB mode</label>
-						<select id="apMode{{source}}">
-						</select>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apCount">Count(s)</label>
-						<input id="apCount{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apExposure{{source}}">Series type(s)</label>
-						<input id="apExposure{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apColor{{source}}">Color(s)</label>
-						<input id="apColor{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apAssign{{source}}">Y axis no(s).</label>
-						<input id="apAssign{{source}}"/>
-					</div>
-							<div class="ui-field-contain">
-						<label for="apStacking{{source}}">Stacking(s)</label>
-						<input id="apStacking{{source}}"/>
-					</div>
-					<div class="ui-field-contain">
-						<label for="apStacks{{source}}">Stack(s).</label>
-						<input id="apStacks{{source}}"/>
-					</div>        
-				</fieldset>
-				-->
-			  </form>
 			</div>
+			<!--------------------------->
+			<div id={id} class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
+			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
+				<table style="width:100%;">
+					<tr>
+					  <td style = "width:10%;">Item</td>
+					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;"></select></td>
+					  <td style = "width:15%;">DB-Mode</td>
+					  <td style = "width:25%;" ><select id="apMode{{source}}" data-native-menu="false" style="font-size:0.8em;"></select></td>
+					  </tr>
+					  <tr>
+					  </table>
+					  <table>
+					  <td style = "width:15%;">Count</td>
+					  <td style = "width:10%;"><input id="apCount{{source}}"/></td>
+					  <td style = "width:20%;text-align:center;">Series Type</td>
+					  <td style = "width:30%;"><select id="apExposure{{source}}" data-native-menu="false"></select></td>
+					  <td style = "width:10%;text-align:center;">Color</td>
+					  <td style = "width:15%;">
+						<input class="apColorButton" id="apColor-2" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">
+						<div id="myColorPicker-apColor-{{source}}"> </div>
+					  </td>
+					  </tr>
+					  <tr>
+					  <td>Y-Axis</td>
+					  <td><select id="apAssign{{source}}" data-native-menu="false"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td>
+						<div class="tooltip">
+						  <button id="del_Item-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
+						  <span class="tooltiptext">remove Item</span>
+						</div>
+					  </td>
+					</tr>
+			  </table>
+			</div>
+			<!--------------------------->
+			<div id={id} class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
+			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
+				<table style="width:100%;">
+					<tr>
+					  <td style = "width:10%;">Item</td>
+					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;"></select></td>
+					  <td style = "width:15%;">DB-Mode</td>
+					  <td style = "width:25%;" ><select id="apMode{{source}}" data-native-menu="false" style="font-size:0.8em;"></select></td>
+					  </tr>
+					  <tr>
+					  </table>
+					  <table>
+					  <td style = "width:15%;">Count</td>
+					  <td style = "width:10%;"><input id="apCount{{source}}"/></td>
+					  <td style = "width:20%;text-align:center;">Series Type</td>
+					  <td style = "width:30%;"><select id="apExposure{{source}}" data-native-menu="false"></select></td>
+					  <td style = "width:10%;text-align:center;">Color</td>
+					  <td style = "width:15%;">
+						<input class="apColorButton" id="apColor-3" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">
+						<div id="myColorPicker-apColor-{{source}}"> </div>
+					  </td>
+					  </tr>
+					  <tr>
+					  <td>Y-Axis</td>
+					  <td><select id="apAssign{{source}}" data-native-menu="false"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td>
+						<div class="tooltip">
+						  <button id="del_Item-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteStream(this)"><img src="icons/ws/jquery_delete.svg"></button>
+						  <span class="tooltiptext">remove Item</span>
+						</div>
+					  </td>
+					</tr>
+			  </table>
+			</div>
+		</form>
     </div>
     <!-- End - Tab Three - Items -->
     <!-- Start - Tab Four - ChartOptions -->
@@ -363,7 +414,7 @@
 				<fieldset>
         <div class="ui-field-contain" style="width:100%;">
             <label for="apLoadSettings">Load Settings</label>
-            <select id="apLoadSettings"><option value="database">Set 1</option><option value="item">Set 2</option></select>
+            <select id="apLoadSettings" data-native-menu="false"><option value="database">Set 1</option><option value="item">Set 2</option></select>
           </div>
         <div class="ui-field-contain">
           <label for="apNewFileName">Name for Set</label>
@@ -386,11 +437,12 @@
 			<input id="apTmax"/>
 		</div>
 		<hr>
-    -->
+    
   
 
 		
 		<hr/>
+		
 		<h2>Item specific Settings:</h2>
 			{%
 		set sources = {
@@ -446,6 +498,7 @@
 		{% endfor %}
 		</div>
 	</div>
+	-->
 	<hr>
 	<button id="apSubmit">Start Plot</button>
 
