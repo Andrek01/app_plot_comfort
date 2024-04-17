@@ -230,54 +230,17 @@
             </tr>
       </table>
       </form>
-      <!--
-      <form class="configform">
-				<fieldset>
-          <table>
-            <tr>
-              <td style = "width:30%;"></td><td style = "width:17%;">Y Axis 1</td><td style = "width:17%;">Y Axis 2</td><td style = "width:17%;">Y Axis 3</td><td style = "width:17%;">Y Axis 4</td>
-            </tr>
-            <tr>
-              <td>Activate axis</td><td><input type="checkbox" id="apYact1"></td><td><input type="checkbox" id="apYact2"></td><td><input type="checkbox" id="apYact3"></td><td><input type="checkbox" id="apYact4"></td>
-            </tr>
-            <tr>
-              <td> Y-axis min value</td><td><input id="apYmin1"/></td><td><input id="apYmin2"/></td><td><input id="apYmin3"/></td><td><input id="apYmin4"/></td>
-            </tr>
-            <tr>
-              <td> Y-axis max value</td><td><input id="apYmax1"/></td><td><input id="apYmax2"/></td><td><input id="apYmax3"/></td><td><input id="apYmax4"/></td>
-            </tr>
-            <tr>
-              <td> Y-axis position</td>
-              <td><select id="apYpos1"><option value="0">left</option><option value="1">right</option></select></td>
-              <td><select id="apYpos2"><option value="0">left</option><option value="1">right</option></select></td>
-              <td><select id="apYpos3"><option value="0">left</option><option value="1">right</option></select></td>
-              <td><select id="apYpos4"><option value="0">left</option><option value="1">right</option></select></td>
-            </tr>
-            <tr>
-              <td> Y-axis scale type</td>
-              <td><select id="apYtype1"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-              <td><select id="apYtype2"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-              <td><select id="apYtype3"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-              <td><select id="apYtype4"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>
-            </tr>
-            <tr>
-              <td> Y-axis unit</td><td><input id="apYunit1"/></td><td><input id="apYunit2"/></td><td><input id="apYunit3"/></td><td><input id="apYunit4"/></td>
-            </tr>
-          </table>
-        </fieldset>
-      </form>
-    -->
     </div>
     <!-- End - Tab Two - Y-Axis-Settings -->
 	<!-- Start - Tab Three - Items -->
 		<div id="glb_tab_glb_3">
 		<form class="configform" style="min-height:400px;max-height:400px;overflow-y:scroll">
 		<div id="itemsetting{{source}}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
-			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
+			<h3 style="display:inline"> *** NEW Item ***</h3>
 				<table style="width:100%;">
 					<tr>
 					  <td style = "width:10%;">Item</td>
-					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;"></select></td>
+					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;" onchange="selectChanged(this)"> </select></td>
 					  <td style = "width:15%;">DB-Mode</td>
 					  <td style = "width:25%;" ><select id="apMode{{source}}" data-native-menu="false" style="font-size:0.8em;"></select></td>
 					  </tr>
@@ -311,7 +274,7 @@
 			</div>
 			<!--------------------------->
 			<div id={id} class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
-			<h3 style="display:inline"> Item : <p style="display:inline;font-weight:bold">{ItemID} </p></h3>
+			<h3 style="display:inline"> *** NEW Item *** <p style="display:inline;font-weight:bold"> </p></h3>
 				<table style="width:100%;">
 					<tr>
 					  <td style = "width:10%;">Item</td>

@@ -209,166 +209,7 @@ function GetColor(button) {
 		}
 
 
-/*
-//****************************************
-function GetColor(button) {
-//****************************************
-    var self = this;
 
-		var myColorButton = button;
-		var myID = button.id.split("-")[1];
-		
-		
-		if ($('#myColorPicker-apColor-'+myID).has('canvas').length != 0)
-		  {
-		    document.getElementById('myColorPicker-apColor-'+myID).innerHTML=""
-		    return
-		  }
-		var canvas = $('<canvas style="border: none;">')
-
-		var node = this.element;
-		var size = 280;
-		var colors = 15;
-		var steps = 19;
-		var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
-
-		var arc = Math.PI / (colors + 2) * 2;
-		var startangle = arc - Math.PI / 2;
-		var gauge = (size - 2) / 2 / (steps + 1);
-		var share = 360 / colors;
-		var center = size / 2;
-
-		if (canvas[0].getContext) {
-			var ctx = canvas[0].getContext("2d");
-			ctx.canvas.width = size;
-			ctx.canvas.height = size;
-			canvas.width(size).height(size);
-
-			// draw background
-			ctx.beginPath();
-			ctx.fillStyle = '#888';
-			ctx.shadowColor = 'rgba(96,96,96,0.4)';
-			ctx.shadowOffsetX = 2;
-			ctx.shadowOffsetY = 2;
-			ctx.shadowBlur = 4;
-			ctx.arc(center, center, size / 2 - 1, 0, 2 * Math.PI, false);
-			ctx.fill();
-			ctx.beginPath();
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.shadowBlur = 0;
-			ctx.fillStyle = '#555';
-			ctx.arc(center, center, size / 2 - 2, 0, 2 * Math.PI, false);
-			ctx.fill();
-
-			// draw colors
-			for (var i = 0; i <= colors; i++) {
-				var angle = startangle + i * arc;
-				var ring = 1;
-				var h = i * share;
-				for (var v = step; v <= 100 - step/2; v += step) {
-					ctx.beginPath();
-					ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 100, v).join(',')+')';
-					ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-					ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-					ctx.fill();
-					ring += 1;
-				}
-				for (var s = (100 - step * ((steps + 1) % 2)/2); s >= step/2; s -= step) {
-					ctx.beginPath();
-					ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, s, 100).join(',')+')';
-					ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-					ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-					ctx.fill();
-					ring += 1;
-				}
-			}
-
-			// draw grey
-			angle = startangle - 2 * arc;
-			ring = 1;
-			h = i * share;
-			for (var v = step; v <= 100; v += (step / 2)) {
-				ctx.beginPath();
-				ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 0, v).join(',')+')';
-				ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + 2 * arc + 0.01, false);
-				ctx.arc(center, center, ring * gauge, angle + 2 * arc + 0.01, angle, true);
-				ctx.fill();
-				ring += 1;
-			}
-
-			// draw center
-			ctx.beginPath();
-			ctx.fillStyle = 'rgb(0,0,0)';
-			ctx.arc(center, center, gauge + 1, 0, 2 * Math.PI, false);
-			ctx.fill();
-
-		}
-
-//		var items = this.options.item.explode();
-		var colormodel = 'rgb'
-		var max = [255,255,255]
-		var min = [0,0,0]
-		// ensure max and min as array of 3 floats (fill by last value if array is shorter)
-		for(var i = 0; i <= 2; i++) {
-			max[i] = parseFloat(max[Math.min(i, max.length-1)])
-			min[i] = parseFloat(min[Math.min(i, min.length-1)])
-		}
-		canvas.popup({ theme: 'none', overlayTheme: 'a', shadow: false, positionTo: this.element }).popup("open")
-		.on(
-		{'click': function (event)
-		 {
-				var offset = $(this).offset();
-				var x = Math.round(event.pageX - offset.left);
-				var y = Math.round(event.pageY - offset.top);
-
-				var values = canvas[0].getContext("2d").getImageData(x, y, 1, 1).data;
-				// DEBUG: console.log([rgb[0], rgb[1], rgb[2], rgb[3]]);
-
-				if(values[3] > 0) { // set only if selected color is not transparent
-					switch(colormodel) {
-						case 'rgb':
-							values = [
-								Math.round(values[0] / 255 * (max[0] - min[0])) + min[0],
-								Math.round(values[1] / 255 * (max[1] - min[1])) + min[1],
-								Math.round(values[2] / 255 * (max[2] - min[2])) + min[2]
-							];
-							break;
-						case 'hsl':
-							values = fx.rgb2hsl(values[0],values[1],values[2]);
-							values = [
-								Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-								Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-								Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-							];
-							break;
-						case 'hsv':
-							values = fx.rgb2hsv(values[0],values[1],values[2]);
-							values = [
-								Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-								Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-								Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-							];
-							break;
-					}
-          self._mem = values;
-				}
-
-				$(this).popup("close");
-				myColor = rgbToHex(values[0],values[1],values[2])
-				myColorButton.style.backgroundColor=myColor
-				// Send Value immediate
-				
-				myObjName=myColorButton.id.split("-")[1]
-				myJSON = {'ID' : myObjName, 'setting' : myColorButton.id.split("-")[0], 'value' : myColor}
-				
-			}
-		 })
-		 
-    document.getElementById('myColorPicker-apColor-'+myID).appendChild(canvas[0])
-
-	}
-*/
 //****************************************
 function componentToHex(c) {
   var hex = c.toString(16);
@@ -396,6 +237,20 @@ function selectChanged(myObj)
       break;
     }
   }
+ isItem = myObj.id.search("apItem") == 0 ? true : false
+ if (isItem)
+  {
+    myId = myObj.id.replace(/[^0-9]/g,"");
+    myHeadLine = document.getElementById("itemsetting"+myId)
+    myText = myHeadLine.children[0].innerHTML
+    myNewText=myText.split(">")[0]+">" + myObj.value
+    myNewText += myText.substr(myText.search("<span",189))
+
+    
+    
+    myHeadLine.children[0].innerHTML  = myNewText
+  }
+
 }
 //****************************************
 function SetupPage(event, ui)
