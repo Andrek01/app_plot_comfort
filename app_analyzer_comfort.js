@@ -62,8 +62,8 @@ function GetColor(button) {
 
 			var node = this.element;
 			var size = 280;
-			var colors = 15;
-			var steps = 19;
+			var colors = 30;	// Original 15
+			var steps = 10;		// Original 19
 			var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
 
 			var arc = Math.PI / (colors + 2) * 2;
