@@ -48,7 +48,7 @@ function get_page_path($value)
 
 function get_set_settings($value)
 {
-   $myFile = file_get_contents(const_path.'pages/'.config_pages.$value.'.pac');
+   $myFile = file_get_contents(const_path.'pages/'.config_pages.'/'.$value.'.pac');
    if ($myFile  != false)
 	   {
   		return ($myFile);
@@ -67,7 +67,7 @@ function get_set_settings($value)
 
 function get_set_series_items($value)
 {
-   $myFile = file_get_contents(const_path.'pages/'.config_pages.'series_items.json');
+   $myFile = file_get_contents(const_path.'pages/'.config_pages.'/series_items.json');
    if ($myFile  != false)
 	   {
   		return ($myFile);
@@ -88,7 +88,7 @@ function store_set_settings($value)
 {
   $content = $value["data"];
   $file    = $value["filename"];
-  file_put_contents(const_path.'pages/'.config_pages.$file.'.pac', $content);
+  file_put_contents(const_path.'pages/'.config_pages.'/'.$file.'.pac', $content);
 	return ('OK');
 }
 
@@ -105,10 +105,10 @@ switch ($command)
         $ret = get_page_path($_GET);
         break;
     case 'get_set_settings':
-        $ret = get_cam_settings($_GET);
+        $ret = get_set_settings($_GET);
         break;        
     case 'store_set_settings':
-        $ret = store_cam_settings($_GET);
+        $ret = store_set_settings($_GET);
         break;
     case 'getFileArray':
         $ret = getFileArray($_GET['suffix']);

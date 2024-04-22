@@ -6,6 +6,7 @@ var source = "";
 var modes = "";
 var modeslist = "";
 var myExposures = ['area','areaspline','areastack','areastair','column','columnstack','line','linestack','spline','stair'];
+var myStackTypes = ['normal','percent'];
 var ExposureList = "";
 var yAxisCount = 0;
 
@@ -15,7 +16,6 @@ var myTimeSettings = {};
 var myItems = {};
 var myChartOptions = {};
 var myStackings = {};
-var myStacks = {};
 
 
 // define default Time-Settings
@@ -49,6 +49,7 @@ myItems[newItemID]['apExposure'] = ""
 myItems[newItemID]['apColor'] = ""
 myItems[newItemID]['apAssign'] = newAxisID
 myItems[newItemID]['stack'] = ""
+
 
 
 
@@ -116,8 +117,27 @@ var itemHtml ='<div id="itemsetting{{source}}" class="itemsetting" data-role="co
 			  </table>\
       </div>'
 
+var StackHeader = '<table style="width:97%;">\
+                    <tr>\
+                      <th style = "width:20%; text-align:center;">No.</th>\
+                      <th style = "width:60%; text-align:center;">Stack-Type</th>\
+					  <th style = "width:20%; text-align:center;">Function</th>\
+                    </tr>'
 
 
+
+var tmpStacks =  '<tr>\
+					  <td style = "text-align:center;">{NO}</td>\
+					  <td style = "text-align:center;">\
+						<select id="apStackType-{id}" data-native-menu="false" onchange=""><option value="1">normal</option><option value="2">percent</option></select>\
+					  </td>\
+					  <td>\
+						<div class="tooltip">\
+						  <button id="del_Stack-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+						  <span class="tooltiptext">remove stack</span>\
+						</div>\
+					  </td>\
+					</tr>'
 
 //****************************************
 function deleteItem(that)
@@ -138,7 +158,7 @@ function itemChange(that)
 function changedYAxis(that)
 //****************************************
 {
-	myActType=that.id.split("-")[0]
+  myActType=that.id.split("-")[0]
   myActId=that.id.split("-")[1]
   myYAxis[myActId][myActType] = that.value
 }
@@ -259,159 +279,159 @@ function SetSelectItem()
 //****************************************
 function GetColor(button) {
 //****************************************
-			var myColorButton = button;
-			var myID = button.id.split("-")[1];
-		
-			var self = this;
-			var canvas = $('<canvas style="border: none;">')
+var myColorButton = button;
+var myID = button.id.split("-")[1];
 
-			var node = this.element;
-			var size = 280;
-			var colors = 30;	// Original 15
-			var steps = 10;		// Original 19
-			var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
+var self = this;
+var canvas = $('<canvas style="border: none;">')
 
-			var arc = Math.PI / (colors + 2) * 2;
-			var startangle = arc - Math.PI / 2;
-			var gauge = (size - 2) / 2 / (steps + 1);
-			var share = 360 / colors;
-			var center = size / 2;
+var node = this.element;
+var size = 280;
+var colors = 30;	// Original 15
+var steps = 10;		// Original 19
+var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
 
-			if (canvas[0].getContext) {
-				var ctx = canvas[0].getContext("2d");
-				ctx.canvas.width = size;
-				ctx.canvas.height = size;
-				canvas.width(size).height(size);
+var arc = Math.PI / (colors + 2) * 2;
+var startangle = arc - Math.PI / 2;
+var gauge = (size - 2) / 2 / (steps + 1);
+var share = 360 / colors;
+var center = size / 2;
 
-				// draw background
-				ctx.beginPath();
-				ctx.fillStyle = '#888';
-				ctx.shadowColor = 'rgba(96,96,96,0.4)';
-				ctx.shadowOffsetX = 2;
-				ctx.shadowOffsetY = 2;
-				ctx.shadowBlur = 4;
-				ctx.arc(center, center, size / 2 - 1, 0, 2 * Math.PI, false);
-				ctx.fill();
-				ctx.beginPath();
-				ctx.shadowOffsetX = 0;
-				ctx.shadowOffsetY = 0;
-				ctx.shadowBlur = 0;
-				ctx.fillStyle = '#555';
-				ctx.arc(center, center, size / 2 - 2, 0, 2 * Math.PI, false);
-				ctx.fill();
+if (canvas[0].getContext) {
+	var ctx = canvas[0].getContext("2d");
+	ctx.canvas.width = size;
+	ctx.canvas.height = size;
+	canvas.width(size).height(size);
 
-				// draw colors
-				for (var i = 0; i <= colors; i++) {
-					var angle = startangle + i * arc;
-					var ring = 1;
-					var h = i * share;
-					for (var v = step; v <= 100 - step/2; v += step) {
-						ctx.beginPath();
-						ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 100, v).join(',')+')';
-						ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-						ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-						ctx.fill();
-						ring += 1;
-					}
-					for (var s = (100 - step * ((steps + 1) % 2)/2); s >= step/2; s -= step) {
-						ctx.beginPath();
-						ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, s, 100).join(',')+')';
-						ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-						ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-						ctx.fill();
-						ring += 1;
-					}
-				}
+	// draw background
+	ctx.beginPath();
+	ctx.fillStyle = '#888';
+	ctx.shadowColor = 'rgba(96,96,96,0.4)';
+	ctx.shadowOffsetX = 2;
+	ctx.shadowOffsetY = 2;
+	ctx.shadowBlur = 4;
+	ctx.arc(center, center, size / 2 - 1, 0, 2 * Math.PI, false);
+	ctx.fill();
+	ctx.beginPath();
+	ctx.shadowOffsetX = 0;
+	ctx.shadowOffsetY = 0;
+	ctx.shadowBlur = 0;
+	ctx.fillStyle = '#555';
+	ctx.arc(center, center, size / 2 - 2, 0, 2 * Math.PI, false);
+	ctx.fill();
 
-				// draw grey
-				angle = startangle - 2 * arc;
-				ring = 1;
-				h = i * share;
-				for (var v = step; v <= 100; v += (step / 2)) {
-					ctx.beginPath();
-					ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 0, v).join(',')+')';
-					ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + 2 * arc + 0.01, false);
-					ctx.arc(center, center, ring * gauge, angle + 2 * arc + 0.01, angle, true);
-					ctx.fill();
-					ring += 1;
-				}
-
-				// draw center
-				ctx.beginPath();
-				ctx.fillStyle = 'rgb(0,0,0)';
-				ctx.arc(center, center, gauge + 1, 0, 2 * Math.PI, false);
-				ctx.fill();
-
-			}
-
-			//var items = this.options.item.explode();
-			var colormodel = 'rgb'
-			var max = [255,255,255]
-			var min = [0,0,0]
-			
-			
-			// ensure max and min as array of 3 floats (fill by last value if array is shorter)
-			for(var i = 0; i <= 2; i++) {
-				max[i] = parseFloat(max[Math.min(i, max.length-1)])
-				min[i] = parseFloat(min[Math.min(i, min.length-1)])
-			}
-			// get Position
-			myElement = document.getElementById(button.id)
-			var rect = myElement.getBoundingClientRect();
-			var mytop = rect.top + (rect.bottom - rect.top) / 2 
-			var myleft = rect.left + (rect.right - rect.left) / 2 
-			// event handler on color select
-			//positionTo: this.element
-			canvas.popup({ theme: 'none', overlayTheme: 'a', shadow: false, y:mytop, x:myleft  }).popup("open")
-			.on( {
-				'popupafterclose': function() { $(this).remove(); },
-				'click': function (event) {
-					var offset = $(this).offset();
-					var x = Math.round(event.pageX - offset.left);
-					var y = Math.round(event.pageY - offset.top);
-
-					var values = canvas[0].getContext("2d").getImageData(x, y, 1, 1).data;
-					// DEBUG: console.log([rgb[0], rgb[1], rgb[2], rgb[3]]);
-
-					if(values[3] > 0) { // set only if selected color is not transparent
-						switch(colormodel) {
-							case 'rgb':
-								values = [
-									Math.round(values[0] / 255 * (max[0] - min[0])) + min[0],
-									Math.round(values[1] / 255 * (max[1] - min[1])) + min[1],
-									Math.round(values[2] / 255 * (max[2] - min[2])) + min[2]
-								];
-								break;
-							case 'hsl':
-								values = fx.rgb2hsl(values[0],values[1],values[2]);
-								values = [
-									Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-									Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-									Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-								];
-								break;
-							case 'hsv':
-								values = fx.rgb2hsv(values[0],values[1],values[2]);
-								values = [
-									Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-									Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-									Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-								];
-								break;
-						}
-
-						
-            self._mem = values;
-					}
-
-					$(this).popup("close");
-					myColor = rgbToHex(values[0],values[1],values[2])
-					myColorButton.style.backgroundColor=myColor
-					// Send Value immediate
-				}
-			});
-
+	// draw colors
+	for (var i = 0; i <= colors; i++) {
+		var angle = startangle + i * arc;
+		var ring = 1;
+		var h = i * share;
+		for (var v = step; v <= 100 - step/2; v += step) {
+			ctx.beginPath();
+			ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 100, v).join(',')+')';
+			ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
+			ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
+			ctx.fill();
+			ring += 1;
 		}
+		for (var s = (100 - step * ((steps + 1) % 2)/2); s >= step/2; s -= step) {
+			ctx.beginPath();
+			ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, s, 100).join(',')+')';
+			ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
+			ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
+			ctx.fill();
+			ring += 1;
+		}
+	}
+
+	// draw grey
+	angle = startangle - 2 * arc;
+	ring = 1;
+	h = i * share;
+	for (var v = step; v <= 100; v += (step / 2)) {
+		ctx.beginPath();
+		ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 0, v).join(',')+')';
+		ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + 2 * arc + 0.01, false);
+		ctx.arc(center, center, ring * gauge, angle + 2 * arc + 0.01, angle, true);
+		ctx.fill();
+		ring += 1;
+	}
+
+	// draw center
+	ctx.beginPath();
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.arc(center, center, gauge + 1, 0, 2 * Math.PI, false);
+	ctx.fill();
+
+}
+
+//var items = this.options.item.explode();
+var colormodel = 'rgb'
+var max = [255,255,255]
+var min = [0,0,0]
+
+
+// ensure max and min as array of 3 floats (fill by last value if array is shorter)
+for(var i = 0; i <= 2; i++) {
+	max[i] = parseFloat(max[Math.min(i, max.length-1)])
+	min[i] = parseFloat(min[Math.min(i, min.length-1)])
+}
+// get Position
+myElement = document.getElementById(button.id)
+var rect = myElement.getBoundingClientRect();
+var mytop = rect.top + (rect.bottom - rect.top) / 2 
+var myleft = rect.left + (rect.right - rect.left) / 2 
+// event handler on color select
+//positionTo: this.element
+canvas.popup({ theme: 'none', overlayTheme: 'a', shadow: false, y:mytop, x:myleft  }).popup("open")
+.on( {
+	'popupafterclose': function() { $(this).remove(); },
+	'click': function (event) {
+		var offset = $(this).offset();
+		var x = Math.round(event.pageX - offset.left);
+		var y = Math.round(event.pageY - offset.top);
+
+		var values = canvas[0].getContext("2d").getImageData(x, y, 1, 1).data;
+		// DEBUG: console.log([rgb[0], rgb[1], rgb[2], rgb[3]]);
+
+		if(values[3] > 0) { // set only if selected color is not transparent
+			switch(colormodel) {
+				case 'rgb':
+					values = [
+						Math.round(values[0] / 255 * (max[0] - min[0])) + min[0],
+						Math.round(values[1] / 255 * (max[1] - min[1])) + min[1],
+						Math.round(values[2] / 255 * (max[2] - min[2])) + min[2]
+					];
+					break;
+				case 'hsl':
+					values = fx.rgb2hsl(values[0],values[1],values[2]);
+					values = [
+						Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
+						Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
+						Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
+					];
+					break;
+				case 'hsv':
+					values = fx.rgb2hsv(values[0],values[1],values[2]);
+					values = [
+						Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
+						Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
+						Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
+					];
+					break;
+			}
+
+			
+self._mem = values;
+		}
+
+		$(this).popup("close");
+		myColor = rgbToHex(values[0],values[1],values[2])
+		myColorButton.style.backgroundColor=myColor
+		// Send Value immediate
+	}
+});
+
+}
 
 
 
@@ -701,6 +721,16 @@ function SaveSetAs()
 //*****************************************
 {
   console.log("saveSetAs")
+  fileName = document.getElementById('apNewFileName').value
+  if (fileName == "")
+  {
+	  notify.message('error', 'No valid Filename', 'Please enter a correct Filename');
+	  return;
+  }
+  storeSet(fileName);
+  mySetList = "<option value=\"" + fileName + "\">" +  fileName  + "</option>";
+  $('#apLoadSettings').append(mySetList).val(fileName).selectmenu('refresh');
+  fileName = document.getElementById('apNewFileName').value = ""
 }
 
 //*****************************************
@@ -708,6 +738,13 @@ function SaveSet()
 //*****************************************
 {
   console.log("saveSet")
+  fileName = document.getElementById("apLoadSettings").value
+  if (fileName == "")
+  {
+	  notify.message('error', 'No Set selected', 'Please select a set-name');
+	  return;
+  }
+  storeSet(fileName);
 }
 
 //************************************************************
@@ -723,8 +760,7 @@ function storeSet(myFileName)
                   "yAxis"        : myYAxis,
                   "Items"        : myItems,
                   "chartOptions" : myChartOptions,
-                  "Stackings"    : myStackings,
-                  "Stacks"       : myStacks
+                  "Stackings"    : myStackings
                 }
   $.ajax({
       url: "apps/app_analyzer_comfort.php",
@@ -739,7 +775,7 @@ function storeSet(myFileName)
         console.log('Status of storing :'+ response );
       },
       error: function () {
-          console.log("Error - while storing settings")
+          notify.message('error', 'Error when storing Set to Backend', 'Please try again');
 
       }
    });
@@ -786,13 +822,15 @@ $.ajax({
     	console.log('Status of storing :'+ response );
       setlistJson = JSON.parse(response)
       mySetList = ""
+	  var firstSet = ""
       $.each(setlistJson, function(idx, mySet){
         mySet = mySet.split('.')[0]
+		if (firstSet == "")	{ firstSet = mySet }
         mySetList += "<option value=\"" + mySet + "\">" +  mySet  + "</option>";
       })
      
        $('#apLoadSettings').children().remove().end();
-       $('#apLoadSettings').append(mySetList).val('avg').selectmenu('refresh');
+       $('#apLoadSettings').append(mySetList).val(firstSet).selectmenu('refresh');
     },
     error: function () {
         console.log("Error - while storing settings")

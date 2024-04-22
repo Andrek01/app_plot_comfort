@@ -1,7 +1,7 @@
 /**
 * -----------------------------------------------------------------------------
 * @package     smartVISU
-* @author      Wolfram v. Hülsen
+* @author      Wolfram v. Hülsen / Andre Kohler
 * @copyright   2012 - 2024
 * @license     GPL [http://www.gnu.de]
 * @version     1.0
@@ -11,6 +11,7 @@
 * @icon        icons/ws/measure_power_meter.svg
 * @color       #b00
 * @description Analyse plots with flexible configuration of series parameters
+* @info        additional,comfortable  functions to create plots and creating widget code. Also allows you to store defined sets to backend and reload it if needed again	
 *
 * -----------------------------------------------------------------------------
 */
@@ -101,7 +102,7 @@
 			'glb_1': 'Time-Axis / Source',
 			'glb_2': 'Y-Axis',
 			'glb_3': 'Items',
-			'glb_4': 'Options / Stacking',
+			'glb_4': 'Options / Stacks',
 			'glb_5': 'Set-Management'
 		}
 		%}
@@ -251,8 +252,10 @@
 					<tr>
 					  <td>Y-Axis</td>
 					  <td><select id="apAssign-{{source}}" data-native-menu="false"><option value="0001" onchange="itemChange(this)">1</option><option value="2">2</option><option value="3">3</option></select></td>
-					  <td></td>
-					  <td></td>
+					  <td style="text-align:center">Stack-Number</td>
+					  <td>
+						<select id="apStackNo-{{source}}" style="width:30%;" data-native-menu="false" onchange="itemChange(this)"><option value="0" ></option><option value="1">1</option><option value="2">2</option></select>
+					  </td>
 					  <td></td>
 					  <td>
 						<div class="tooltip">
@@ -281,20 +284,27 @@
     <!-- End - Tab Three - Items -->
     <!-- Start - Tab Four - ChartOptions -->
 		<div id="glb_tab_glb_4">
-			<form class="configform" style="min-height:500px;max-height:500px">
+			<form class="configform" style="min-height:500px;max-height:500px;overflow-y:scroll">
 				<fieldset>
 				<div class="ui-field-contain">
 				  <label for="apChartopts">Chart options</label>
-				  <input id="apChartopts"/>
+				  <input id="apChartopts" onchange="myChartOptions=this.value"/>
 				</div>
-				<div class="ui-field-contain">
-					<label for="apStacking-{{source}}">Stacking(s)</label>
-					<input id="apStacking-{{source}}"/>
+				<h2>Stacks</h2>
+				<hr>
+				<div id="StackSettings">
 				</div>
-				<div class="ui-field-contain">
-					<label for="apStacks-{{source}}">Stack(s).</label>
-					<input id="apStacks-{{source}}"/>
-				</div>
+				<table style="width:100%">
+				  <tr>
+				  <td style="width:70%"></td>
+				  <td style="width:30%; padding-left:15%">
+					<div class="tooltip">
+					  <button id="add_Stack" class="FctButton" ui-mini ui-btn-inline" name="btn-add-stack" type="button"  onclick="addStack()"><img src="icons/ws/jquery_plus.svg"> </button>
+					 <span class="tooltiptext">add a new stack</span> 
+					</div>
+					</td>
+				  </tr>
+				</table>
 				</fieldset>
 			</form>
     </div>
@@ -303,16 +313,31 @@
 		<div id="glb_tab_glb_5">
 			<form class="configform" style="min-height:500px;">
 				<fieldset>
-        <div class="ui-field-contain" style="width:100%;display: flex;flex-flow: row;">
-            <label for="apLoadSettings">Load Settings</label>
-            <select id="apLoadSettings" data-native-menu="false"><option value="database">Set 1</option><option value="item">Set 2</option></select>
-            <button id="store_set" class="FctButton ui-mini ui-btn-inline" name="btn-store_set" type="button"  style="width:15%!important" onclick="SaveSet()"> Store Set </button>  
-          </div>
-        <div class="ui-field-contain" style="display: flex;flex-flow: row; ">
-        <button id="store_set_as" class="FctButton ui-mini ui-btn-inline" name="btn-store_set_as" type="button"  style="width:30%!important" onclick="SaveSetAs()"> Store Set as  </button>  
-          <input id="apNewFileName"/>
-        </div>
-        </fieldset>
+				<table style="width:100%">
+				<tr>
+				<td style="width:25%;text-align:center">
+					Select stored Set
+				</td>
+				<td style="width:50%">
+					<select id="apLoadSettings" data-native-menu="false"><option value="database">Set 1</option><option value="item">Set 2</option></select>
+				</td>
+				<td style="width:25%">
+					<button id="store_set" class="FctButton ui-mini ui-btn-inline" name="btn-store_set" type="button"  style="width:90%!important" onclick="SaveSet()"> Store Set </button>  
+				</td>
+				</tr>
+				<tr>
+				<td style="width:32%">
+					<button id="store_set_as" class="FctButton ui-mini ui-btn-inline" name="btn-store_set_as" type="button"  style="width:90%!important" onclick="SaveSetAs()"> Store Set as  </button>  
+				</td>
+				<td style="width:32%">
+					<input id="apNewFileName"/>
+				</td>
+				<td style="width:32%">
+
+				</td>
+				</tr>
+				</table>
+				</fieldset>
       </form>
     </div>
     <!-- End - Tab Five - Set-Management -->
