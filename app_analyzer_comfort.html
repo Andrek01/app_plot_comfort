@@ -101,8 +101,8 @@
 		set sources = {
 			'glb_1': 'Time-Axis / Source',
 			'glb_2': 'Y-Axis',
-			'glb_3': 'Items',
-			'glb_4': 'Options / Stacks',
+			'glb_3': 'Options / Stacks',
+			'glb_4': 'Items',
 			'glb_5': 'Set-Management'
 		}
 		%}
@@ -224,8 +224,36 @@
       </form>
     </div>
     <!-- End - Tab Two - Y-Axis-Settings -->
-	<!-- Start - Tab Three - Items -->
+
+    <!-- Start - Tab three - ChartOptions -->
 		<div id="glb_tab_glb_3">
+			<form class="configform" style="min-height:500px;max-height:500px;overflow-y:scroll">
+				<fieldset>
+				<div class="ui-field-contain">
+				  <label for="apChartopts">Chart options</label>
+				  <input id="apChartopts" onchange="myChartOptions=this.value"/>
+				</div>
+				<h2>Stacks</h2>
+				<hr>
+				<div id="StackSettings">
+				</div>
+				<table style="width:100%">
+				  <tr>
+				  <td style="width:70%"></td>
+				  <td style="width:30%; padding-left:15%">
+					<div class="tooltip">
+					  <button id="add_Stack" class="FctButton" ui-mini ui-btn-inline" name="btn-add-stack" type="button"  onclick="addStack()"><img src="icons/ws/jquery_plus.svg"> </button>
+					 <span class="tooltiptext">add a new stack</span> 
+					</div>
+					</td>
+				  </tr>
+				</table>
+				</fieldset>
+			</form>
+    </div>
+  <!-- End - Tab three - ChartOptions -->
+	<!-- Start - Tab four - Items -->
+		<div id="glb_tab_glb_4">
 		<form class="configform" style="min-height:500px;max-height:500px;overflow-y:scroll">
 		<div id="itemsetting-{{source}}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">
 			<h3 style="display:inline"> *** NEW Item ***</h3>
@@ -281,34 +309,7 @@
 		</form>
     
     </div>
-    <!-- End - Tab Three - Items -->
-    <!-- Start - Tab Four - ChartOptions -->
-		<div id="glb_tab_glb_4">
-			<form class="configform" style="min-height:500px;max-height:500px;overflow-y:scroll">
-				<fieldset>
-				<div class="ui-field-contain">
-				  <label for="apChartopts">Chart options</label>
-				  <input id="apChartopts" onchange="myChartOptions=this.value"/>
-				</div>
-				<h2>Stacks</h2>
-				<hr>
-				<div id="StackSettings">
-				</div>
-				<table style="width:100%">
-				  <tr>
-				  <td style="width:70%"></td>
-				  <td style="width:30%; padding-left:15%">
-					<div class="tooltip">
-					  <button id="add_Stack" class="FctButton" ui-mini ui-btn-inline" name="btn-add-stack" type="button"  onclick="addStack()"><img src="icons/ws/jquery_plus.svg"> </button>
-					 <span class="tooltiptext">add a new stack</span> 
-					</div>
-					</td>
-				  </tr>
-				</table>
-				</fieldset>
-			</form>
-    </div>
-    <!-- End - Tab Four - ChartOptions -->
+    <!-- End - Tab four - Items -->
     <!-- Start - Tab Five - Set-Management -->
 		<div id="glb_tab_glb_5">
 			<form class="configform" style="min-height:500px;">
@@ -344,7 +345,7 @@
     
 	
 	<hr>
-	<button id="apSubmit">Start Plot</button>
+	<button id="apSubmit">Refresh Plot</button>
 
 {% endblock %}
 

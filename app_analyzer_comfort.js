@@ -5,7 +5,7 @@ var mySerieItems = [];
 var source = "";
 var modes = "";
 var modeslist = "";
-var myExposures = ['area','areaspline','areastack','areastair','column','columnstack','line','linestack','spline','stair'];
+var myExposures = ['area','areaspline','areastair','column','line','spline','stair','from Stack']; // 'areastack','linestack','columnstack'
 var myStackTypes = ['normal','percent'];
 var ExposureList = "";
 var yAxisCount = 0;
@@ -117,27 +117,35 @@ var itemHtml ='<div id="itemsetting{{source}}" class="itemsetting" data-role="co
 			  </table>\
       </div>'
 
-var StackHeader = '<table style="width:97%;">\
-                    <tr>\
-                      <th style = "width:20%; text-align:center;">No.</th>\
-                      <th style = "width:60%; text-align:center;">Stack-Type</th>\
-					  <th style = "width:20%; text-align:center;">Function</th>\
-                    </tr>'
+var tmplStackHeader = '<table style="width:97%;">\
+                      <tr>\
+                        <th style = "width:20%; text-align:center;">No.</th>\
+                        <th style = "width:35%; text-align:center;">Stack-Type</th>\
+                        <th style = "width:35%; text-align:center;">Stack-Exposure</th>\
+                        <th style = "width:10%; text-align:center;">Function</th>\
+                      </tr>'
 
 
 
-var tmpStacks =  '<tr>\
-					  <td style = "text-align:center;">{NO}</td>\
-					  <td style = "text-align:center;">\
-						<select id="apStackType-{id}" data-native-menu="false" onchange=""><option value="1">normal</option><option value="2">percent</option></select>\
-					  </td>\
-					  <td>\
-						<div class="tooltip">\
-						  <button id="del_Stack-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
-						  <span class="tooltiptext">remove stack</span>\
-						</div>\
-					  </td>\
-					</tr>'
+var tmplStacks =  '<tr>\
+                    <td style = "text-align:center;">{NO}</td>\
+                    <td style = "text-align:center;">\
+                    <select id="apStackType-{id}" data-native-menu="false" onchange=""><option value="normal">normal</option><option value="percent">percent</option></select>\
+                    </td>\
+                    <td style = "text-align:center;">\
+                    <select id="apStackExposure-{id}" data-native-menu="false" onchange=""><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
+                    </td>\
+                    <td>\
+                    <div class="tooltip">\
+                      <button id="del_Stack-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+                      <span class="tooltiptext">remove stack</span>\
+                    </div>\
+                    </td>\
+                  </tr>'
+
+
+
+
 
 //****************************************
 function deleteItem(that)
@@ -244,7 +252,85 @@ function addYAxis()
   YAxis2Screen(myYAxis,true)
 }
 
+//****************************************
+function Stacks2Screen(addNew)
+//****************************************
+{
+  my_Stacks = ""
+  my_Stacks += tmplStackHeader
+  StackCount = 0
+  newStackID = 0
+  for (var key in myStackings) {
+    StackCount += 1
+    newStackID = parseInt(key)
+    myStackings[key]['no']= StackCount
+    myHtml2append = tmplStacks.split("{id}").join(key)
+    myHtml2append = myHtml2append.split("{NO}").join(StackCount)
+    my_Stacks += myHtml2append
+    }
+  if (addNew == true)
+    {
+      StackCount += 1
+      newStackID = "00000" + (parseInt(newStackID)+1)
+      newStackID = newStackID.slice(newStackID.length-4,8);
+      myStackings[newStackID] = {}
+      myStackings[newStackID]['no']= StackCount
+      myStackings[newStackID]['apStackType']     = "normal"
+      myStackings[newStackID]['apStackExposure']     = "columnstack"
+      
+      myHtml2append = tmplStacks.split("{id}").join(newStackID)
+      myHtml2append = myHtml2append.split("{NO}").join(StackCount)
 
+      myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
+      my_Stacks += myHtml2append        
+    }
+  my_Stacks += '</table>'
+  Stack_Rows = $('#StackSettings');
+  Stack_Rows.html(my_Stacks).trigger('create');
+  //YValue2Screen()
+}
+
+//****************************************
+function StackValue2Screen()
+//****************************************
+{
+  // Object.keys(myYAxis).length  -> Anzahl Achsen
+  for (var key in myStackings )
+  {
+    myActID = key
+    for (var entry in myStackings[key])
+      {
+        if (entry != 'no')
+         {
+           myObj = $('#'+entry+'-'+myActID)
+          if (myObj[0].nodeName == "SELECT")
+            {
+              $('#'+entry+'-'+myActID).val(myStackings[key][entry]).selectmenu('refresh');
+            }
+          else
+            {
+              myObj[0].value = myStackings[key][entry]
+            }
+         }
+      }
+  }
+}
+
+//****************************************
+function addStack()
+//****************************************
+{
+  Stacks2Screen(true)
+  StackValue2Screen()
+}
+//****************************************
+function deleteStack(button)
+//****************************************
+{
+	myActId=button.id.split("-")[1]
+	delete myStackings[myActId]
+	StackValue2Screen()
+}
 
 //****************************************
 function SetSelectItem()
