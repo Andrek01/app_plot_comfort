@@ -128,26 +128,26 @@
           <tr style="height:20px">
           <td style="width:20%">
             <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_StartTime_0" name="btn_StartTime" onchange="selectChanged(this) value="0"
+              <input type="radio" id="btn_StartTime_0" name="btn_StartTime" onclick="selectChanged(this)" value="0"
                    data-val-on="1" data-val-off="0" />
               Start-Time
             </label>
           </td>
           <td style="width:40%">
             <label for="StartDate"></label>
-            <input type="date" id="StartDate" name="StartDate" value="2024-01-01" min="2010-01-01" max="2154-01-01" />
+            <input type="date" id="StartDate" name="StartDate" value="2024-01-01" min="2010-01-01" max="2154-01-01" onchange="settingsChanged(this)" />
           </td>
           <td style="width:40%">
             <div id="myEndTime">
             <label for="StartTime"></label>
-            <input type="time" id="StartTime" name="StartTime" min="00:00" max="23:59" value="00:00" />
+            <input type="time" id="StartTime" name="StartTime" min="00:00" max="23:59" value="00:00" onchange="settingsChanged(this)"/>
             </div>
           </td>
           </tr>
           <tr style="height:20px">
           <td>
             <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_StartTime_1" name="btn_StartTime" onchange="selectChanged(this)" value="1" checked 
+              <input type="radio" id="btn_StartTime_1" name="btn_StartTime" onclick="selectChanged(this)" value="1" checked 
                    data-val-on="1" data-val-off="0" />
               Duration
             </label>
@@ -167,20 +167,20 @@
           </td>
           <td>
             <label for="name"></label>
-            <input type="text" id="txtDuration" name="txtDuration"  minlength="2" maxlength="8" size="10" value="1d"/>
+            <input type="text" id="txtDuration" name="txtDuration"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
           </td>
           </tr>
           <tr style="height:20px">
           <td>
               <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_EndTime_0" name="endtime" onchange="selectChanged(this)"
+              <input type="radio" id="btn_EndTime_0" name="btn_EndTime" onclick="selectChanged(this)" value="0"
                    data-val-on="1" data-val-off="0" />
               End-Time
-            </label>
+              </label>
           </td>
           <td style="width:40%">
             <label for="EndDate"></label>
-            <input type="date" id="EndDate" name="EndDate" value="" min="2010-01-01" max="2154-01-01" />
+            <input type="date" id="EndDate" name="EndDate" value="" min="2010-01-01" max="2154-01-01" onchange="settingsChanged(this)"/>
           </td>
           <td style="width:40%">
             <label for="EndTime"></label>
@@ -190,8 +190,8 @@
           <tr style="height:20px">
           <td>
             <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_EndTime_1" name="endtime" onchange="selectChanged(this)" checked
-                   data-val-on="1" data-val-off="0" />
+              <input type="radio" id="btn_EndTime_1" name="btn_EndTime" onclick="selectChanged(this)" value="1" checked
+                   data-val-on="1" data-val-off="0" onchange="settingsChanged(this)"/>
               Now
             </label>
           </td>
@@ -206,21 +206,21 @@
 			</div>
 		<!-- End - Tab One - Time-Axis-Settings -->
     <!-- Start - Tab Two - Y-Axis-Settings -->
-	<div id="glb_tab_glb_2">
+    <div id="glb_tab_glb_2">
       <form class="configform" style="min-height:500px; max-height:500px;overflow-y:scroll;">
       <div id="y_axis_settings">
       </div>
-    <table style="width:100%">
-      <tr>
-      <td style="width:70%"></td>
-      <td style="width:30%; padding-left:15%">
-        <div class="tooltip">
-          <button id="add_y_axis" class="FctButton" ui-mini ui-btn-inline" name="btn-add-y-axis" type="button"  onclick="addYAxis()"><img src="icons/ws/jquery_plus.svg"> </button>
-         <span class="tooltiptext">add a new Y-Axis</span> 
-        </div>
-        </td>
-      </tr>
-    </table>
+      <table style="width:100%">
+        <tr>
+        <td style="width:70%"></td>
+        <td style="width:30%; padding-left:15%">
+          <div class="tooltip">
+            <button id="add_y_axis" class="FctButton" ui-mini ui-btn-inline" name="btn-add-y-axis" type="button"  onclick="addYAxis()"><img src="icons/ws/jquery_plus.svg"> </button>
+           <span class="tooltiptext">add a new Y-Axis</span> 
+          </div>
+          </td>
+        </tr>
+      </table>
       </form>
     </div>
     <!-- End - Tab Two - Y-Axis-Settings -->

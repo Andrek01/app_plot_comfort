@@ -5,7 +5,7 @@ var mySerieItems = [];
 var source = "";
 var modes = "";
 var modeslist = "";
-var myExposures = ['area','areaspline','areastair','column','line','spline','stair','from Stack']; // 'areastack','linestack','columnstack'
+var myExposures = ['area','areaspline','areastair','column','line','spline','stair','areastack','linestack','columnstack'];
 var myStackTypes = ['normal','percent'];
 var ExposureList = "";
 var yAxisCount = 0;
@@ -28,7 +28,7 @@ myTimeSettings = {
                     "EndType"   : "1",
                     "EndDate"   : myDate.toJSON().slice(0, 10),
                     "EndTime"   : myDate.toJSON().slice(11, 16),
-                    "Duratin"   : "1d"
+                    "Duration"   : "1d"
                   }
 // define first Axis
 var tmplYAxis = {}
@@ -148,9 +148,16 @@ var tmplStacks =  '<tr>\
                   </tr>'
 
 
+//*******************************************************
+// Settings - Handling
+//*******************************************************
 
-
-
+//****************************************
+function settingsChanged(that)
+//****************************************
+{
+  console.log(that.id)
+}
 
 //*******************************************************
 // Item - Handling
@@ -703,9 +710,22 @@ function selectChanged(myObj)
   console.log(myObj);
   switch(myObj.name)
   {
+    case 'btn_StartTime' :
+    {
+      console.log("btn_StartTime")
+      myTimeSettings.StartType = myObj.value;
+      break;
+    }
+    case 'btn_EndTime' :
+    {
+      console.log("btn_EndTime")
+      myTimeSettings.EndType = myObj.value;
+      break;
+    }
     case 'selDuration' :
     {
       $('#txtDuration')[0].value = myObj.value;
+      myTimeSettings.Duration = myObj.value;
       break;
     }
     case 'apDataSource' :
@@ -719,7 +739,7 @@ function selectChanged(myObj)
  if (isItem)
   {
     myActId=myObj.id.split("-")[1]
-	myItems[myActId]['apItem'] = myObj.value;
+    myItems[myActId]['apItem'] = myObj.value;
     myHeadLine = document.getElementById("itemsetting-"+myActId)
     myText = myHeadLine.children[0].innerHTML
     myNewText=myText.split(">")[0]+">" + myObj.value
