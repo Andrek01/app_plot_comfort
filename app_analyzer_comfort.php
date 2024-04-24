@@ -48,7 +48,8 @@ function get_page_path($value)
 
 function get_set_settings($value)
 {
-   $myFile = file_get_contents(const_path.'pages/'.config_pages.'/'.$value.'.pac');
+   $file    = $value["filename"];
+   $myFile = file_get_contents(const_path.'pages/'.config_pages.'/'.$file.'.pac');
    if ($myFile  != false)
 	   {
   		return ($myFile);

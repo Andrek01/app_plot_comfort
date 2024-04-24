@@ -31,25 +31,27 @@ myTimeSettings = {
                     "Duratin"   : "1d"
                   }
 // define first Axis
+var tmplYAxis = {}
+tmplYAxis['no']= yAxisCount
+tmplYAxis['apYmin']     = ""
+tmplYAxis['apYmax']     = ""
+tmplYAxis['apYpos']     = "0"
+tmplYAxis['apYtype']    = "linear"
+tmplYAxis['apYunit']    = ""
 newAxisID="0001"
-myYAxis[newAxisID] = {}
-myYAxis[newAxisID]['no']= yAxisCount
-myYAxis[newAxisID]['apYmin']     = ""
-myYAxis[newAxisID]['apYmax']     = ""
-myYAxis[newAxisID]['apYpos']     = "0"
-myYAxis[newAxisID]['apYtype']    = "linear"
-myYAxis[newAxisID]['apYunit']    = ""
-// define First Item
-newItemID="0001"
-myItems[newItemID] = {}
-myItems[newItemID]['apItem'] = ""
-myItems[newItemID]['apMode'] = "avg"
-myItems[newItemID]['apCount'] = "100"
-myItems[newItemID]['apExposure'] = ""
-myItems[newItemID]['apColor'] = ""
-myItems[newItemID]['apAssign'] = newAxisID
-myItems[newItemID]['stack'] = ""
+myYAxis[newAxisID] = JSON.parse(JSON.stringify(tmplYAxis));
 
+// define First Item
+var tmplItem = {}
+tmplItem['apItem'] = ""
+tmplItem['apMode'] = "avg"
+tmplItem['apCount'] = "100"
+tmplItem['apExposure'] = "spline"
+tmplItem['apColor'] = ""
+tmplItem['apAssign'] = newAxisID		// Assing to first Y-Axis
+tmplItem['apStack'] = ""
+newItemID="0001"
+myItems[newItemID] = JSON.parse(JSON.stringify(tmplItem));
 
 
 
@@ -79,37 +81,39 @@ var yAxisHtml = '<tr>\
         </td>\
       </tr>';
 
-var itemHtml ='<div id="itemsetting{{source}}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">\
+var ItemHtml ='<div id="itemsetting-{id}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">\
 			<h3 style="display:inline"> *** NEW Item ***</h3>\
 				<table style="width:100%;">\
 					<tr>\
 					  <td style = "width:10%;">Item</td>\
-					  <td style = "width:50%;"><select id="apItem{{source}}" data-native-menu="false" style="font-size:0.8em;width:100%;" onchange="selectChanged(this)"> </select></td>\
+					  <td style = "width:50%;"><select id="apItem-{id}" data-native-menu="false" style="font-size:0.8em;width:100%;" onchange="selectChanged(this)"> </select></td>\
 					  <td style = "width:15%;text-align:center;">DB-Mode</td>\
-					  <td style = "width:25%;" ><select id="apMode-{{source}}" data-native-menu="false" style="font-size:0.8em;" onchange="itemChange(this)"></select></td>\
+					  <td style = "width:25%;" ><select id="apMode-{id}" data-native-menu="false" style="font-size:0.8em;" onchange="itemChange(this)"></select></td>\
 					  </tr>\
         </table>\
 				<table>\
           <tr>\
 					  <td style = "width:15%;">Count</td>\
-					  <td style = "width:10%;"><input id="apCount{{source}}" value="100" onchange=""itemChange(this)/></td>\
+					  <td style = "width:10%;"><input id="apCount-{id}" value="100" onchange="itemChange(this)"/></td>\
 					  <td style = "width:20%;text-align:center;">Series Type</td>\
-					  <td style = "width:30%;"><select id="apExposure-{{{source}}" data-native-menu="false" onchange="itemChange(this)"></select></td>\
+					  <td style = "width:30%;"><select id="apExposure-{id}" data-native-menu="false" onchange="itemChange(this)"></select></td>\
 					  <td style = "width:10%;text-align:center;">Color</td>\
 					  <td style = "width:15%;">\
-              <input class="apColorButton" id="apColor-{{source}}" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">\
-						<div id="myColorPicker-apColor-{{source}}"> </div>\
+              <input class="apColorButton" id="apColor-{id}" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">\
+						<div id="myColorPicker-apColor-{id}"> </div>\
 					  </td>\
 				  </tr>\
 					<tr>\
 					  <td>Y-Axis</td>\
-					  <td><select id="apAssign-{{source}}" data-native-menu="false"><option value="0001" onchange="itemChange(this)">1</option><option value="2">2</option><option value="3">3</option></select></td>\
-					  <td></td>\
-					  <td></td>\
+					  <td><select id="apAssign-{id}" data-native-menu="false" onchange="itemChange(this)"><option value="0001">1</option></select></td>\
+					  <td style="text-align:center">Stack-Number</td>\
+					  <td>\
+						<select id="apStack-{id}" style="width:30%;" data-native-menu="false" onchange="itemChange(this)"><option value="0" >&nbsp;</option></select>\
+					  </td>\
 					  <td></td>\
 					  <td>\
 						<div class="tooltip">\
-						  <button id="del_Item-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteItem(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+						  <button id="del_Item-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteItem(this)"><img src="icons/ws/jquery_delete.svg"></button>\
 						  <span class="tooltiptext">remove Item</span>\
 						</div>\
 					  </td>\
@@ -130,14 +134,14 @@ var tmplStackHeader = '<table style="width:97%;">\
 var tmplStacks =  '<tr>\
                     <td style = "text-align:center;">{NO}</td>\
                     <td style = "text-align:center;">\
-                    <select id="apStackType-{id}" data-native-menu="false" onchange=""><option value="normal">normal</option><option value="percent">percent</option></select>\
+                    <select id="apStackType-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="normal">normal</option><option value="percent">percent</option></select>\
                     </td>\
                     <td style = "text-align:center;">\
-                    <select id="apStackExposure-{id}" data-native-menu="false" onchange=""><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
+                    <select id="apStackExposure-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
                     </td>\
                     <td>\
                     <div class="tooltip">\
-                      <button id="del_Stack-{{Source}}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+                      <button id="del_Stack-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
                       <span class="tooltiptext">remove stack</span>\
                     </div>\
                     </td>\
@@ -147,10 +151,101 @@ var tmplStacks =  '<tr>\
 
 
 
+
+//*******************************************************
+// Item - Handling
+//*******************************************************
+
+//****************************************
+function ItemValue2Screen()
+//****************************************
+{
+	for (var key in myItems)
+		{
+			myActID = key
+			for (var entry in myItems[key])
+			  {
+			   myObj = $('#'+entry+'-'+myActID)
+			   if (myObj[0].nodeName == "SELECT")
+				{
+				  $('#'+entry+'-'+myActID).val(myItems[key][entry]).selectmenu('refresh');
+				  // Set Headline
+				  if (entry == "apItem" && myObj[0].value !=  "")
+				  {
+					myHeadLine = document.getElementById("itemsetting-"+myActID)
+					myText = myHeadLine.children[0].innerHTML
+					myNewText=myText.split(">")[0]+">" + myObj[0].value
+					myNewText += myText.substr(myText.search("<span",189))
+					
+					myHeadLine.children[0].innerHTML  = myNewText
+				  }
+				}
+			   else if (myObj[0].nodeName == "INPUT" && entry == "apColor")
+				{
+				  myObj[0].style.backgroundColor= myItems[key][entry]
+				}
+			   else 
+				{
+				  myObj[0].value = myItems[key][entry]
+				}
+			  }
+		}
+
+}
+
+//****************************************
+function Items2Screen(addNew)
+//****************************************
+{
+	
+	itemCount = 0
+	newItemID = 0
+	myHtmlItem = ""
+	for (var key in myItems)
+		{
+		itemCount += 1
+		newItemID = parseInt(key)
+		myHtml2append = ItemHtml.split("{id}").join(key)
+		myHtmlItem += myHtml2append
+		}
+	if (addNew == true)
+	{
+	  itemCount += 1
+	  newItemID = "00000" + (parseInt(newItemID)+1)
+	  newItemID = newItemID.slice(newItemID.length-4,8);
+	  myItems[newItemID] = JSON.parse(JSON.stringify(tmplItem));
+	  
+	  
+	  myHtml2append = ItemHtml.split("{id}").join(newItemID)
+	  myHtml2append = myHtml2append.split("{NO}").join(itemCount)
+
+	  myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
+	  myHtmlItem += myHtml2append        
+	}
+	
+	ItemSettings = $('#ItemSettings');
+	ItemSettings.html(myHtmlItem).trigger('create');
+	
+	SetSelectItem();
+	YValue2Screen();
+	StackValue2Screen();
+	ItemValue2Screen()
+}
+
 //****************************************
 function deleteItem(that)
 //****************************************
 {
+	myActId=that.id.split("-")[1]
+	delete myItems[myActId]
+	Items2Screen(false)
+}
+
+//****************************************
+function addItem(that)
+//****************************************
+{
+	Items2Screen(true)
 }
 
 //****************************************
@@ -161,6 +256,11 @@ function itemChange(that)
   myActId=that.id.split("-")[1]
   myItems[myActId][myActType] = that.value
 }
+
+
+//*******************************************************
+// Y-Axis - Handling
+//*******************************************************
 
 //****************************************
 function changedYAxis(that)
@@ -175,6 +275,11 @@ function changedYAxis(that)
 function deleteYAxis(button)
 //****************************************
 {
+	if (Object.keys(myYAxis).length == 1)  	// -> Anzahl Achsen
+	{
+		notify.message('warning', 'Y-Axis-Handling', 'You can´t delete the last Y-Axis. But you can leave it blank');
+		return
+	}
 	myActId=button.id.split("-")[1]
 	delete myYAxis[myActId]
 	YAxis2Screen(myYAxis,false)
@@ -201,13 +306,9 @@ function YAxis2Screen(data, addNew)
       yAxisCount += 1
       newAxisID = "00000" + (parseInt(newAxisID)+1)
       newAxisID = newAxisID.slice(newAxisID.length-4,8);
-      myYAxis[newAxisID] = {}
+      myYAxis[newAxisID] = JSON.parse(JSON.stringify(tmplYAxis));
       myYAxis[newAxisID]['no']= yAxisCount
-      myYAxis[newAxisID]['apYmin']     = ""
-      myYAxis[newAxisID]['apYmax']     = ""
-      myYAxis[newAxisID]['apYpos']     = "0"
-      myYAxis[newAxisID]['apYtype']    = "linear"
-      myYAxis[newAxisID]['apYunit']    = ""
+      
       myHtml2append = yAxisHtml.split("{id}").join(newAxisID)
       myHtml2append = myHtml2append.split("{NO}").join(yAxisCount)
 
@@ -224,13 +325,14 @@ function YAxis2Screen(data, addNew)
 function YValue2Screen()
 //****************************************
 {
-  // Object.keys(myYAxis).length  -> Anzahl Achsen
+  myOptions = "";
   for (var key in myYAxis )
   {
     myActID = key
+	myOptions += "<option value=\"" + key + "\">" +  myYAxis[key]['no']  + "</option>";
     for (var entry in myYAxis[key])
       {
-        if (entry != 'no')
+		if (entry != 'no')
          {
            myObj = $('#'+entry+'-'+myActID)
           if (myObj[0].nodeName == "SELECT")
@@ -244,6 +346,18 @@ function YValue2Screen()
          }
       }
   }
+  for (var key in myItems )
+  {
+	myActValue = myItems[key]['apAssign']
+	if (myYAxis[myActValue] == undefined)
+	{
+	   // Y-Axis disappeared
+	   myValue="0001"
+	   myItems[key]['apAssign'] = "0001"
+	}
+	$('#apAssign-'+key ).children().remove().end();
+    $('#apAssign-'+key ).append(myOptions).val(myActValue).selectmenu('refresh');
+  }
 }
 //****************************************
 function addYAxis()
@@ -251,6 +365,12 @@ function addYAxis()
 {
   YAxis2Screen(myYAxis,true)
 }
+
+
+//*******************************************************
+// Stack - Handling
+//*******************************************************
+
 
 //****************************************
 function Stacks2Screen(addNew)
@@ -287,17 +407,20 @@ function Stacks2Screen(addNew)
   my_Stacks += '</table>'
   Stack_Rows = $('#StackSettings');
   Stack_Rows.html(my_Stacks).trigger('create');
-  //YValue2Screen()
+  StackValue2Screen()
 }
 
 //****************************************
 function StackValue2Screen()
 //****************************************
 {
-  // Object.keys(myYAxis).length  -> Anzahl Achsen
+  myOptions = "";
+  // add a blank line
+  myOptions += "<option value=\"" + '0000' + "\">" +  '&nbsp;'  + "</option>";
   for (var key in myStackings )
   {
-    myActID = key
+	myOptions += "<option value=\"" + key + "\">" +  myStackings[key]['no']  + "</option>";
+	myActID = key
     for (var entry in myStackings[key])
       {
         if (entry != 'no')
@@ -314,6 +437,20 @@ function StackValue2Screen()
          }
       }
   }
+  for (var key in myItems )
+  {
+	myObj = '#apStack-'+key 
+	myActValue = myItems[key]['apStack']
+	if (myStackings[myActValue] == undefined)
+	{
+	   // Stack disappeared
+	   myValue="0000"
+	   myItems[key]['apStack'] = ""
+	}
+	$(myObj).children().remove().end();
+    $(myObj).append(myOptions).val(myActValue).selectmenu('refresh');
+  }
+  
 }
 
 //****************************************
@@ -321,7 +458,6 @@ function addStack()
 //****************************************
 {
   Stacks2Screen(true)
-  StackValue2Screen()
 }
 //****************************************
 function deleteStack(button)
@@ -329,8 +465,22 @@ function deleteStack(button)
 {
 	myActId=button.id.split("-")[1]
 	delete myStackings[myActId]
-	StackValue2Screen()
+	Stacks2Screen(false)
 }
+
+//****************************************
+function changedStack(that)
+//****************************************
+{
+	myActName=that.id.split("-")[0]
+	myActId=that.id.split("-")[1]
+	myStackings[myActID][myActName] = that.value
+}
+
+
+//*******************************************************
+// Settings - Handling
+//*******************************************************
 
 //****************************************
 function SetSelectItem()
@@ -348,174 +498,185 @@ function SetSelectItem()
   $.each(mySerieItems[myType], function(idx, myItem){
     myItemList += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
 	})
- 
-   $('#apItem-0001').children().remove().end();
-   $('#apItem-0001').append(myItemList).val('avg').selectmenu('refresh');
-   
-   $.each(myExposures, function(idx, myItem){
-    ExposureList += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
-	})
-  
-   $('#apExposure-0001').append(ExposureList).val('spline').selectmenu('refresh');
-  
+
+	ExposureList = ""
+	$.each(myExposures, function(idx, myItem){
+	ExposureList += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
+	})   
+
+	for (key in myItems)
+	{
+		$('#apItem-'+key).children().remove().end();
+		$('#apItem-'+key).append(myItemList).val('avg').selectmenu('refresh');
+
+		$('#apExposure-'+key).children().remove().end();
+		$('#apExposure-'+key).append(ExposureList).val('spline').selectmenu('refresh');
+		
+		$('#apMode-'+key).children().remove().end();
+		$('#apMode-'+key).append(modeslist).val('avg').selectmenu('refresh');
+		
+	}
 	
 	
 }
 
 //****************************************
-function GetColor(button) {
+function GetColor(button) 
 //****************************************
-var myColorButton = button;
-var myID = button.id.split("-")[1];
+{
+	var myColorButton = button;
+	var myID = button.id.split("-")[1];
 
-var self = this;
-var canvas = $('<canvas style="border: none;">')
+	var self = this;
+	var canvas = $('<canvas style="border: none;">')
 
-var node = this.element;
-var size = 280;
-var colors = 30;	// Original 15
-var steps = 10;		// Original 19
-var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
+	var node = this.element;
+	var size = 280;
+	var colors = 30;	// Original 15
+	var steps = 10;		// Original 19
+	var step = Math.round(2 * 100 / (steps + 1) * 10000) / 10000;
 
-var arc = Math.PI / (colors + 2) * 2;
-var startangle = arc - Math.PI / 2;
-var gauge = (size - 2) / 2 / (steps + 1);
-var share = 360 / colors;
-var center = size / 2;
+	var arc = Math.PI / (colors + 2) * 2;
+	var startangle = arc - Math.PI / 2;
+	var gauge = (size - 2) / 2 / (steps + 1);
+	var share = 360 / colors;
+	var center = size / 2;
 
-if (canvas[0].getContext) {
-	var ctx = canvas[0].getContext("2d");
-	ctx.canvas.width = size;
-	ctx.canvas.height = size;
-	canvas.width(size).height(size);
+	if (canvas[0].getContext) {
+		var ctx = canvas[0].getContext("2d");
+		ctx.canvas.width = size;
+		ctx.canvas.height = size;
+		canvas.width(size).height(size);
 
-	// draw background
-	ctx.beginPath();
-	ctx.fillStyle = '#888';
-	ctx.shadowColor = 'rgba(96,96,96,0.4)';
-	ctx.shadowOffsetX = 2;
-	ctx.shadowOffsetY = 2;
-	ctx.shadowBlur = 4;
-	ctx.arc(center, center, size / 2 - 1, 0, 2 * Math.PI, false);
-	ctx.fill();
-	ctx.beginPath();
-	ctx.shadowOffsetX = 0;
-	ctx.shadowOffsetY = 0;
-	ctx.shadowBlur = 0;
-	ctx.fillStyle = '#555';
-	ctx.arc(center, center, size / 2 - 2, 0, 2 * Math.PI, false);
-	ctx.fill();
-
-	// draw colors
-	for (var i = 0; i <= colors; i++) {
-		var angle = startangle + i * arc;
-		var ring = 1;
-		var h = i * share;
-		for (var v = step; v <= 100 - step/2; v += step) {
-			ctx.beginPath();
-			ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 100, v).join(',')+')';
-			ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-			ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-			ctx.fill();
-			ring += 1;
-		}
-		for (var s = (100 - step * ((steps + 1) % 2)/2); s >= step/2; s -= step) {
-			ctx.beginPath();
-			ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, s, 100).join(',')+')';
-			ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
-			ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
-			ctx.fill();
-			ring += 1;
-		}
-	}
-
-	// draw grey
-	angle = startangle - 2 * arc;
-	ring = 1;
-	h = i * share;
-	for (var v = step; v <= 100; v += (step / 2)) {
+		// draw background
 		ctx.beginPath();
-		ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 0, v).join(',')+')';
-		ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + 2 * arc + 0.01, false);
-		ctx.arc(center, center, ring * gauge, angle + 2 * arc + 0.01, angle, true);
+		ctx.fillStyle = '#888';
+		ctx.shadowColor = 'rgba(96,96,96,0.4)';
+		ctx.shadowOffsetX = 2;
+		ctx.shadowOffsetY = 2;
+		ctx.shadowBlur = 4;
+		ctx.arc(center, center, size / 2 - 1, 0, 2 * Math.PI, false);
 		ctx.fill();
-		ring += 1;
+		ctx.beginPath();
+		ctx.shadowOffsetX = 0;
+		ctx.shadowOffsetY = 0;
+		ctx.shadowBlur = 0;
+		ctx.fillStyle = '#555';
+		ctx.arc(center, center, size / 2 - 2, 0, 2 * Math.PI, false);
+		ctx.fill();
+
+		// draw colors
+		for (var i = 0; i <= colors; i++) {
+			var angle = startangle + i * arc;
+			var ring = 1;
+			var h = i * share;
+			for (var v = step; v <= 100 - step/2; v += step) {
+				ctx.beginPath();
+				ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 100, v).join(',')+')';
+				ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
+				ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
+				ctx.fill();
+				ring += 1;
+			}
+			for (var s = (100 - step * ((steps + 1) % 2)/2); s >= step/2; s -= step) {
+				ctx.beginPath();
+				ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, s, 100).join(',')+')';
+				ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + arc + 0.01, false);
+				ctx.arc(center, center, ring * gauge, angle + arc + 0.01, angle, true);
+				ctx.fill();
+				ring += 1;
+			}
+		}
+
+		// draw grey
+		angle = startangle - 2 * arc;
+		ring = 1;
+		h = i * share;
+		for (var v = step; v <= 100; v += (step / 2)) {
+			ctx.beginPath();
+			ctx.fillStyle = 'rgb('+fx.hsv2rgb(h, 0, v).join(',')+')';
+			ctx.arc(center, center, ring * gauge + gauge + 1, angle, angle + 2 * arc + 0.01, false);
+			ctx.arc(center, center, ring * gauge, angle + 2 * arc + 0.01, angle, true);
+			ctx.fill();
+			ring += 1;
+		}
+
+		// draw center
+		ctx.beginPath();
+		ctx.fillStyle = 'rgb(0,0,0)';
+		ctx.arc(center, center, gauge + 1, 0, 2 * Math.PI, false);
+		ctx.fill();
+
 	}
 
-	// draw center
-	ctx.beginPath();
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.arc(center, center, gauge + 1, 0, 2 * Math.PI, false);
-	ctx.fill();
-
-}
-
-//var items = this.options.item.explode();
-var colormodel = 'rgb'
-var max = [255,255,255]
-var min = [0,0,0]
+	//var items = this.options.item.explode();
+	var colormodel = 'rgb'
+	var max = [255,255,255]
+	var min = [0,0,0]
 
 
-// ensure max and min as array of 3 floats (fill by last value if array is shorter)
-for(var i = 0; i <= 2; i++) {
-	max[i] = parseFloat(max[Math.min(i, max.length-1)])
-	min[i] = parseFloat(min[Math.min(i, min.length-1)])
-}
-// get Position
-myElement = document.getElementById(button.id)
-var rect = myElement.getBoundingClientRect();
-var mytop = rect.top + (rect.bottom - rect.top) / 2 
-var myleft = rect.left + (rect.right - rect.left) / 2 
-// event handler on color select
-//positionTo: this.element
-canvas.popup({ theme: 'none', overlayTheme: 'a', shadow: false, y:mytop, x:myleft  }).popup("open")
-.on( {
-	'popupafterclose': function() { $(this).remove(); },
-	'click': function (event) {
-		var offset = $(this).offset();
-		var x = Math.round(event.pageX - offset.left);
-		var y = Math.round(event.pageY - offset.top);
+	// ensure max and min as array of 3 floats (fill by last value if array is shorter)
+	for(var i = 0; i <= 2; i++) {
+		max[i] = parseFloat(max[Math.min(i, max.length-1)])
+		min[i] = parseFloat(min[Math.min(i, min.length-1)])
+	}
+	// get Position
+	myElement = document.getElementById(button.id)
+	var rect = myElement.getBoundingClientRect();
+	var mytop = rect.top + (rect.bottom - rect.top) / 2 
+	var myleft = rect.left + (rect.right - rect.left) / 2 
+	// event handler on color select
+	//positionTo: this.element
+	canvas.popup({ theme: 'none', overlayTheme: 'a', shadow: false, y:mytop, x:myleft  }).popup("open")
+	.on( {
+		'popupafterclose': function() { $(this).remove(); },
+		'click': function (event) {
+			var offset = $(this).offset();
+			var x = Math.round(event.pageX - offset.left);
+			var y = Math.round(event.pageY - offset.top);
 
-		var values = canvas[0].getContext("2d").getImageData(x, y, 1, 1).data;
-		// DEBUG: console.log([rgb[0], rgb[1], rgb[2], rgb[3]]);
+			var values = canvas[0].getContext("2d").getImageData(x, y, 1, 1).data;
+			// DEBUG: console.log([rgb[0], rgb[1], rgb[2], rgb[3]]);
 
-		if(values[3] > 0) { // set only if selected color is not transparent
-			switch(colormodel) {
-				case 'rgb':
-					values = [
-						Math.round(values[0] / 255 * (max[0] - min[0])) + min[0],
-						Math.round(values[1] / 255 * (max[1] - min[1])) + min[1],
-						Math.round(values[2] / 255 * (max[2] - min[2])) + min[2]
-					];
-					break;
-				case 'hsl':
-					values = fx.rgb2hsl(values[0],values[1],values[2]);
-					values = [
-						Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-						Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-						Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-					];
-					break;
-				case 'hsv':
-					values = fx.rgb2hsv(values[0],values[1],values[2]);
-					values = [
-						Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
-						Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
-						Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
-					];
-					break;
+			if(values[3] > 0) { // set only if selected color is not transparent
+				switch(colormodel) {
+					case 'rgb':
+						values = [
+							Math.round(values[0] / 255 * (max[0] - min[0])) + min[0],
+							Math.round(values[1] / 255 * (max[1] - min[1])) + min[1],
+							Math.round(values[2] / 255 * (max[2] - min[2])) + min[2]
+						];
+						break;
+					case 'hsl':
+						values = fx.rgb2hsl(values[0],values[1],values[2]);
+						values = [
+							Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
+							Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
+							Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
+						];
+						break;
+					case 'hsv':
+						values = fx.rgb2hsv(values[0],values[1],values[2]);
+						values = [
+							Math.round(values[0] / 360 * (max[0] - min[0])) + min[0],
+							Math.round(values[1] / 100 * (max[1] - min[1])) + min[1],
+							Math.round(values[2] / 100 * (max[2] - min[2])) + min[2]
+						];
+						break;
+				}
+
+				
+	self._mem = values;
 			}
 
-			
-self._mem = values;
+			$(this).popup("close");
+			myColor = rgbToHex(values[0],values[1],values[2])
+			myColorButton.style.backgroundColor=myColor
+			// Set Value to dict
+			myActId=myColorButton.id.split("-")[1]
+			myItems[myActId]['apColor'] = myColor
 		}
-
-		$(this).popup("close");
-		myColor = rgbToHex(values[0],values[1],values[2])
-		myColorButton.style.backgroundColor=myColor
-		// Send Value immediate
-	}
-});
+	});
 
 }
 
@@ -554,16 +715,15 @@ function selectChanged(myObj)
       break;
     }
   }
- isItem = myObj.id.search("apItem") == 0 ? true : false
+ isItem = myObj.id.search("apItem-") == 0 ? true : false
  if (isItem)
   {
-    myId = myObj.id.replace(/[^0-9]/g,"");
-    myHeadLine = document.getElementById("itemsetting-"+myId)
+    myActId=myObj.id.split("-")[1]
+	myItems[myActId]['apItem'] = myObj.value;
+    myHeadLine = document.getElementById("itemsetting-"+myActId)
     myText = myHeadLine.children[0].innerHTML
     myNewText=myText.split(">")[0]+">" + myObj.value
     myNewText += myText.substr(myText.search("<span",189))
-
-    
     
     myHeadLine.children[0].innerHTML  = myNewText
   }
@@ -575,33 +735,33 @@ function SetupPage(event, ui)
 {
 	// source was for different menu styles and is not needed any more
 	// can be used to display config menus for more items
-  GetAllSets()
-  GetSeriesItems();
-  YAxis2Screen(myYAxis,false)
-  
-  myDate= new Date()
-  document.getElementById("StartDate").value= myDate.toJSON().slice(0, 4) +'-01-01'
-  document.getElementById("EndDate").value= myDate.toJSON().slice(0, 10);
-  document.getElementById("EndTime").value= myDate.toJSON().slice(11, 16)
+	// get available database modes from backend driver and make
+	// them selectable options
+	modes = io.aggregates ? io.aggregates.concat(['minmax', 'minmaxavg']) : ['avg', 'min', 'max', 'diff', 'sum', 'on', 'raw', 'count', 'countall', 'integrate', 'differentiate', 'duration', 'minmax', 'minmaxavg'];
+	//var modes = io.aggregates.concat(['minmax', 'minmaxavg']);
+	modeslist = ""
+	$.each(modes, function(idx, mode){
+	modeslist += "<option value=\"" + mode + "\">" +  mode  + "</option>";
+	})
+
+	
+	GetSeriesItems();
+	GetAllSets();
+	YAxis2Screen(myYAxis,false);
+	StackValue2Screen(false);
+	Items2Screen(false);
+	SetSelectItem();
+
+	
+
+	myDate= new Date()
+	document.getElementById("StartDate").value= myDate.toJSON().slice(0, 4) +'-01-01'
+	document.getElementById("EndDate").value= myDate.toJSON().slice(0, 10);
+	document.getElementById("EndTime").value= myDate.toJSON().slice(11, 16)
   
 
   //$('#StartDate').prop('disabled',true);
-	
-			
-  // get available database modes from backend driver and make
-  // them selectable options
-  var modes = io.aggregates ? io.aggregates.concat(['minmax', 'minmaxavg']) : ['avg', 'min', 'max', 'diff', 'sum', 'on', 'raw', 'count', 'countall', 'integrate', 'differentiate', 'duration', 'minmax', 'minmaxavg'];
-  //var modes = io.aggregates.concat(['minmax', 'minmaxavg']);
-  var modeslist = ""
-  $.each(modes, function(idx, mode){
-    modeslist += "<option value=\"" + mode + "\">" +  mode  + "</option>";
-  })
-  for (var i=1; i<6; i++){
-      myId = "00000" + (parseInt(i));
-      myId = myId.slice(myId.length-4,8);
-    $('#apMode-'+ myId).append(modeslist).val('avg').selectmenu('refresh');
-  }
-  
+
   // start plot display on button click
   $('#apSubmit ').on('click', function(event,ui){
   
@@ -802,6 +962,40 @@ function setCheckRadio(myRadioName, radioID)
   }
 }
 
+
+//*****************************************
+function LoadSet(that)
+//*****************************************
+{
+	myFileName = that.value
+	$.ajax({
+      url: "apps/app_analyzer_comfort.php",
+      type: "GET",
+         data: {
+              command  : 'get_set_settings',
+              filename : myFileName
+             },
+      contentType: "application/json; charset=utf-8",
+      success: function (response) {
+        console.log('Status of load set:'+ response );
+		data = JSON.parse(response);
+		myTimeSettings 	= data["TimeSettings"]
+		myYAxis 		= data["yAxis"]
+		myItems			= data["Items"]
+		myChartOptions  = data["chartOptions"]
+		myStackings 	= data["Stackings"]
+		
+		YAxis2Screen(myYAxis,false);
+		Stacks2Screen(false);
+		Items2Screen(false);
+      },
+      error: function () {
+          notify.message('error', 'Error when loading Set from Backend', 'Please try again');
+
+      }
+   });
+}
+
 //*****************************************
 function SaveSetAs()
 //*****************************************
@@ -858,7 +1052,7 @@ function storeSet(myFileName)
              },
       contentType: "application/json; charset=utf-8",
       success: function (response) {
-        console.log('Status of storing :'+ response );
+        console.log('Status of storing set :'+ response );
       },
       error: function () {
           notify.message('error', 'Error when storing Set to Backend', 'Please try again');
@@ -879,7 +1073,7 @@ $.ajax({
 			   	 },
     contentType: "application/json; charset=utf-8",
     success: function (response) {
-    	console.log('Status of storing :'+ response );
+    	console.log('Status of get serie-items :'+ response );
       mySerieItems = JSON.parse(response);
       SetSelectItem();
     },
@@ -905,7 +1099,7 @@ $.ajax({
 			   	 },
     contentType: "application/json; charset=utf-8",
     success: function (response) {
-    	console.log('Status of storing :'+ response );
+    	console.log('Status get all sets :'+ response );
       setlistJson = JSON.parse(response)
       mySetList = ""
 	  var firstSet = ""
@@ -916,7 +1110,7 @@ $.ajax({
       })
      
        $('#apLoadSettings').children().remove().end();
-       $('#apLoadSettings').append(mySetList).val(firstSet).selectmenu('refresh');
+       $('#apLoadSettings').append(mySetList).val('').selectmenu('refresh');
     },
     error: function () {
         console.log("Error - while storing settings")
