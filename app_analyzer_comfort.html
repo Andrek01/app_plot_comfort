@@ -167,7 +167,7 @@
           </td>
           <td>
             <label for="name"></label>
-            <input type="text" id="txtDuration" name="txtDuration"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
+            <input type="text" id="Duration" name="Duration"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
           </td>
           </tr>
           <tr style="height:20px">
@@ -184,7 +184,7 @@
           </td>
           <td style="width:40%">
             <label for="EndTime"></label>
-            <input type="time" id="EndTime" name="EndTime" min="00:00" max="23:59" value="23:59" />
+            <input type="time" id="EndTime" name="EndTime" min="00:00" max="23:59" value="23:59" onchange="settingsChanged(this)"/>
           </td>
           </tr>
           <tr style="height:20px">

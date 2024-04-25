@@ -14,30 +14,30 @@ var yAxisCount = 0;
 var myYAxis = {};
 var myTimeSettings = {};
 var myItems = {};
-var myChartOptions = {};
+var myChartOptions = "";
 var myStackings = {};
 
 
 // define default Time-Settings
 myDate= new Date()
 myTimeSettings = {
-                    "ItemType"  : "Database",
-                    "StartType" : "1",
-                    "StartDate" : myDate.toJSON().slice(0, 4) +'-01-01',
-                    "StartTime" : "00:00",
-                    "EndType"   : "1",
-                    "EndDate"   : myDate.toJSON().slice(0, 10),
-                    "EndTime"   : myDate.toJSON().slice(11, 16),
-                    "Duration"   : "1d"
-                  }
+					"apDataSource"	: "Database",
+					"StartType"		: "1",
+					"StartDate"		: myDate.toJSON().slice(0, 4) +'-01-01',
+					"StartTime"		: "00:00",
+					"EndType"		: "1",
+					"EndDate"		: myDate.toJSON().slice(0, 10),
+					"EndTime"		: myDate.toJSON().slice(11, 16),
+					"Duration"		: "1d"
+				  }
 // define first Axis
 var tmplYAxis = {}
 tmplYAxis['no']= yAxisCount
-tmplYAxis['apYmin']     = ""
-tmplYAxis['apYmax']     = ""
-tmplYAxis['apYpos']     = "0"
-tmplYAxis['apYtype']    = "linear"
-tmplYAxis['apYunit']    = ""
+tmplYAxis['apYmin']		= ""
+tmplYAxis['apYmax']		= ""
+tmplYAxis['apYpos']		= "0"
+tmplYAxis['apYtype']	= "linear"
+tmplYAxis['apYunit']	= ""
 newAxisID="0001"
 myYAxis[newAxisID] = JSON.parse(JSON.stringify(tmplYAxis));
 
@@ -56,30 +56,30 @@ myItems[newItemID] = JSON.parse(JSON.stringify(tmplItem));
 
 
 var yAxisHeader = '<table style="width:97%;">\
-                    <tr>\
-                      <th style = "width:5%; text-align:center;">No.</th>\
-                      <th style = "width:14%; text-align:center;">Min-Value</th>\
-                      <th style = "width:14%; text-align:center;">Max-Value</th>\
-                      <th style = "width:14%; text-align:center;">Axis-Position</th>\
-                      <th style = "width:14%; text-align:center;min-width:100px;">Axis scale type</th>\
-                      <th style = "width:14%; text-align:center;">Axis unit</th>\
-                      <th style = "width:14%; text-align:center;">Function</th>\
-                    </tr>'
+					<tr>\
+					  <th style = "width:5%; text-align:center;">No.</th>\
+					  <th style = "width:14%; text-align:center;">Min-Value</th>\
+					  <th style = "width:14%; text-align:center;">Max-Value</th>\
+					  <th style = "width:14%; text-align:center;">Axis-Position</th>\
+					  <th style = "width:14%; text-align:center;min-width:100px;">Axis scale type</th>\
+					  <th style = "width:14%; text-align:center;">Axis unit</th>\
+					  <th style = "width:14%; text-align:center;">Function</th>\
+					</tr>'
 
 var yAxisHtml = '<tr>\
-        <td style="text-align:center">{NO}</td>\
-        <td><input id="apYmin-{id}" onchange="changedYAxis(this)" ></td>\
-        <td><input id="apYmax-{id}" onchange="changedYAxis(this)"></td>\
-        <td><select id="apYpos-{id}" onchange="changedYAxis(this)" data-native-menu="false" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select>\</td>\
-        <td><select id="apYtype-{id}" onchange="changedYAxis(this)" data-native-menu="false"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>\
-        <td>\<input id="apYunit-{id}" onchange="changedYAxis(this)">\</td>\
-        <td>\
-          <div class="tooltip">\
-            <button id="del_Y_Axis-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-delete-y-axis" type="button"  onclick="deleteYAxis(this)"><img src="icons/ws/jquery_delete.svg"></button>\
-            <span class="tooltiptext">remove Axis</span>\
-          </div>\
-        </td>\
-      </tr>';
+		<td style="text-align:center">{NO}</td>\
+		<td><input id="apYmin-{id}" onchange="changedYAxis(this)" ></td>\
+		<td><input id="apYmax-{id}" onchange="changedYAxis(this)"></td>\
+		<td><select id="apYpos-{id}" onchange="changedYAxis(this)" data-native-menu="false" style="font-size:0.8em;"><option value="0">left</option><option value="1">right</option></select>\</td>\
+		<td><select id="apYtype-{id}" onchange="changedYAxis(this)" data-native-menu="false"><option value="linear">linear</option><option value="logarithmic">logarithm</option><option value="boolean">bool</option></select></td>\
+		<td>\<input id="apYunit-{id}" onchange="changedYAxis(this)">\</td>\
+		<td>\
+		  <div class="tooltip">\
+			<button id="del_Y_Axis-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-delete-y-axis" type="button"	 onclick="deleteYAxis(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+			<span class="tooltiptext">remove Axis</span>\
+		  </div>\
+		</td>\
+	  </tr>';
 
 var ItemHtml ='<div id="itemsetting-{id}" class="itemsetting" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="a" style="width:98%;">\
 			<h3 style="display:inline"> *** NEW Item ***</h3>\
@@ -90,16 +90,16 @@ var ItemHtml ='<div id="itemsetting-{id}" class="itemsetting" data-role="collaps
 					  <td style = "width:15%;text-align:center;">DB-Mode</td>\
 					  <td style = "width:25%;" ><select id="apMode-{id}" data-native-menu="false" style="font-size:0.8em;" onchange="itemChange(this)"></select></td>\
 					  </tr>\
-        </table>\
+		</table>\
 				<table>\
-          <tr>\
+		  <tr>\
 					  <td style = "width:15%;">Count</td>\
 					  <td style = "width:10%;"><input id="apCount-{id}" value="100" onchange="itemChange(this)"/></td>\
 					  <td style = "width:20%;text-align:center;">Series Type</td>\
 					  <td style = "width:30%;"><select id="apExposure-{id}" data-native-menu="false" onchange="itemChange(this)"></select></td>\
 					  <td style = "width:10%;text-align:center;">Color</td>\
 					  <td style = "width:15%;">\
-              <input class="apColorButton" id="apColor-{id}" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">\
+			  <input class="apColorButton" id="apColor-{id}" type="button" onclick="GetColor(this)" style="background-color:rgb(248, 249, 247);opacity:1;">\
 						<div id="myColorPicker-apColor-{id}"> </div>\
 					  </td>\
 				  </tr>\
@@ -113,39 +113,39 @@ var ItemHtml ='<div id="itemsetting-{id}" class="itemsetting" data-role="collaps
 					  <td></td>\
 					  <td>\
 						<div class="tooltip">\
-						  <button id="del_Item-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"  onclick="deleteItem(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+						  <button id="del_Item-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-store-streams" type="button"	 onclick="deleteItem(this)"><img src="icons/ws/jquery_delete.svg"></button>\
 						  <span class="tooltiptext">remove Item</span>\
 						</div>\
 					  </td>\
 					</tr>\
 			  </table>\
-      </div>'
+	  </div>'
 
 var tmplStackHeader = '<table style="width:97%;">\
-                      <tr>\
-                        <th style = "width:20%; text-align:center;">No.</th>\
-                        <th style = "width:35%; text-align:center;">Stack-Type</th>\
-                        <th style = "width:35%; text-align:center;">Stack-Exposure</th>\
-                        <th style = "width:10%; text-align:center;">Function</th>\
-                      </tr>'
+					  <tr>\
+						<th style = "width:20%; text-align:center;">No.</th>\
+						<th style = "width:35%; text-align:center;">Stack-Type</th>\
+						<th style = "width:35%; text-align:center;">Stack-Exposure</th>\
+						<th style = "width:10%; text-align:center;">Function</th>\
+					  </tr>'
 
 
 
 var tmplStacks =  '<tr>\
-                    <td style = "text-align:center;">{NO}</td>\
-                    <td style = "text-align:center;">\
-                    <select id="apStackType-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="normal">normal</option><option value="percent">percent</option></select>\
-                    </td>\
-                    <td style = "text-align:center;">\
-                    <select id="apStackExposure-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
-                    </td>\
-                    <td>\
-                    <div class="tooltip">\
-                      <button id="del_Stack-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"  onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
-                      <span class="tooltiptext">remove stack</span>\
-                    </div>\
-                    </td>\
-                  </tr>'
+					<td style = "text-align:center;">{NO}</td>\
+					<td style = "text-align:center;">\
+					<select id="apStackType-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="normal">normal</option><option value="percent">percent</option></select>\
+					</td>\
+					<td style = "text-align:center;">\
+					<select id="apStackExposure-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
+					</td>\
+					<td>\
+					<div class="tooltip">\
+					  <button id="del_Stack-{id}" class="FctButton ui-mini ui-btn-inline" name="btn-remove-stack" type="button"	 onclick="deleteStack(this)"><img src="icons/ws/jquery_delete.svg"></button>\
+					  <span class="tooltiptext">remove stack</span>\
+					</div>\
+					</td>\
+				  </tr>'
 
 
 //*******************************************************
@@ -157,6 +157,7 @@ function settingsChanged(that)
 //****************************************
 {
   console.log(that.id)
+  myTimeSettings[that.id] = that.value;
 }
 
 //*******************************************************
@@ -227,7 +228,7 @@ function Items2Screen(addNew)
 	  myHtml2append = myHtml2append.split("{NO}").join(itemCount)
 
 	  myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
-	  myHtmlItem += myHtml2append        
+	  myHtmlItem += myHtml2append		 
 	}
 	
 	ItemSettings = $('#ItemSettings');
@@ -282,7 +283,7 @@ function changedYAxis(that)
 function deleteYAxis(button)
 //****************************************
 {
-	if (Object.keys(myYAxis).length == 1)  	// -> Anzahl Achsen
+	if (Object.keys(myYAxis).length == 1)	// -> Anzahl Achsen
 	{
 		notify.message('warning', 'Y-Axis-Handling', 'You can´t delete the last Y-Axis. But you can leave it blank');
 		return
@@ -301,27 +302,27 @@ function YAxis2Screen(data, addNew)
   yAxisCount = 0
   newAxisID = 0
   for (var key in data) {
-    yAxisCount += 1
-    newAxisID = parseInt(key)
-    myYAxis[key]['no']= yAxisCount
-    myHtml2append = yAxisHtml.split("{id}").join(key)
-    myHtml2append = myHtml2append.split("{NO}").join(yAxisCount)
-    my_Y_Axis += myHtml2append
-    }
+	yAxisCount += 1
+	newAxisID = parseInt(key)
+	myYAxis[key]['no']= yAxisCount
+	myHtml2append = yAxisHtml.split("{id}").join(key)
+	myHtml2append = myHtml2append.split("{NO}").join(yAxisCount)
+	my_Y_Axis += myHtml2append
+	}
   if (addNew == true)
-    {
-      yAxisCount += 1
-      newAxisID = "00000" + (parseInt(newAxisID)+1)
-      newAxisID = newAxisID.slice(newAxisID.length-4,8);
-      myYAxis[newAxisID] = JSON.parse(JSON.stringify(tmplYAxis));
-      myYAxis[newAxisID]['no']= yAxisCount
-      
-      myHtml2append = yAxisHtml.split("{id}").join(newAxisID)
-      myHtml2append = myHtml2append.split("{NO}").join(yAxisCount)
+	{
+	  yAxisCount += 1
+	  newAxisID = "00000" + (parseInt(newAxisID)+1)
+	  newAxisID = newAxisID.slice(newAxisID.length-4,8);
+	  myYAxis[newAxisID] = JSON.parse(JSON.stringify(tmplYAxis));
+	  myYAxis[newAxisID]['no']= yAxisCount
+	  
+	  myHtml2append = yAxisHtml.split("{id}").join(newAxisID)
+	  myHtml2append = myHtml2append.split("{NO}").join(yAxisCount)
 
-      myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
-      my_Y_Axis += myHtml2append        
-    }
+	  myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
+	  my_Y_Axis += myHtml2append		
+	}
   my_Y_Axis += '</table>'
   y_Axis_Rows = $('#y_axis_settings');
   y_Axis_Rows.html(my_Y_Axis).trigger('create');
@@ -335,23 +336,23 @@ function YValue2Screen()
   myOptions = "";
   for (var key in myYAxis )
   {
-    myActID = key
-	myOptions += "<option value=\"" + key + "\">" +  myYAxis[key]['no']  + "</option>";
-    for (var entry in myYAxis[key])
-      {
+	myActID = key
+	myOptions += "<option value=\"" + key + "\">" +	 myYAxis[key]['no']	 + "</option>";
+	for (var entry in myYAxis[key])
+	  {
 		if (entry != 'no')
-         {
-           myObj = $('#'+entry+'-'+myActID)
-          if (myObj[0].nodeName == "SELECT")
-            {
-              $('#'+entry+'-'+myActID).val(myYAxis[key][entry]).selectmenu('refresh');
-            }
-          else
-            {
-              myObj[0].value = myYAxis[key][entry]
-            }
-         }
-      }
+		 {
+		   myObj = $('#'+entry+'-'+myActID)
+		  if (myObj[0].nodeName == "SELECT")
+			{
+			  $('#'+entry+'-'+myActID).val(myYAxis[key][entry]).selectmenu('refresh');
+			}
+		  else
+			{
+			  myObj[0].value = myYAxis[key][entry]
+			}
+		 }
+	  }
   }
   for (var key in myItems )
   {
@@ -363,7 +364,7 @@ function YValue2Screen()
 	   myItems[key]['apAssign'] = "0001"
 	}
 	$('#apAssign-'+key ).children().remove().end();
-    $('#apAssign-'+key ).append(myOptions).val(myActValue).selectmenu('refresh');
+	$('#apAssign-'+key ).append(myOptions).val(myActValue).selectmenu('refresh');
   }
 }
 //****************************************
@@ -388,29 +389,29 @@ function Stacks2Screen(addNew)
   StackCount = 0
   newStackID = 0
   for (var key in myStackings) {
-    StackCount += 1
-    newStackID = parseInt(key)
-    myStackings[key]['no']= StackCount
-    myHtml2append = tmplStacks.split("{id}").join(key)
-    myHtml2append = myHtml2append.split("{NO}").join(StackCount)
-    my_Stacks += myHtml2append
-    }
+	StackCount += 1
+	newStackID = parseInt(key)
+	myStackings[key]['no']= StackCount
+	myHtml2append = tmplStacks.split("{id}").join(key)
+	myHtml2append = myHtml2append.split("{NO}").join(StackCount)
+	my_Stacks += myHtml2append
+	}
   if (addNew == true)
-    {
-      StackCount += 1
-      newStackID = "00000" + (parseInt(newStackID)+1)
-      newStackID = newStackID.slice(newStackID.length-4,8);
-      myStackings[newStackID] = {}
-      myStackings[newStackID]['no']= StackCount
-      myStackings[newStackID]['apStackType']     = "normal"
-      myStackings[newStackID]['apStackExposure']     = "columnstack"
-      
-      myHtml2append = tmplStacks.split("{id}").join(newStackID)
-      myHtml2append = myHtml2append.split("{NO}").join(StackCount)
+	{
+	  StackCount += 1
+	  newStackID = "00000" + (parseInt(newStackID)+1)
+	  newStackID = newStackID.slice(newStackID.length-4,8);
+	  myStackings[newStackID] = {}
+	  myStackings[newStackID]['no']= StackCount
+	  myStackings[newStackID]['apStackType']	 = "normal"
+	  myStackings[newStackID]['apStackExposure']	 = "columnstack"
+	  
+	  myHtml2append = tmplStacks.split("{id}").join(newStackID)
+	  myHtml2append = myHtml2append.split("{NO}").join(StackCount)
 
-      myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
-      my_Stacks += myHtml2append        
-    }
+	  myHtml2append = myHtml2append.split('data-collapsed="true"').join('data-collapsed="false"')
+	  my_Stacks += myHtml2append		
+	}
   my_Stacks += '</table>'
   Stack_Rows = $('#StackSettings');
   Stack_Rows.html(my_Stacks).trigger('create');
@@ -423,26 +424,26 @@ function StackValue2Screen()
 {
   myOptions = "";
   // add a blank line
-  myOptions += "<option value=\"" + '0000' + "\">" +  '&nbsp;'  + "</option>";
+  myOptions += "<option value=\"" + '0000' + "\">" +  '&nbsp;'	+ "</option>";
   for (var key in myStackings )
   {
-	myOptions += "<option value=\"" + key + "\">" +  myStackings[key]['no']  + "</option>";
+	myOptions += "<option value=\"" + key + "\">" +	 myStackings[key]['no']	 + "</option>";
 	myActID = key
-    for (var entry in myStackings[key])
-      {
-        if (entry != 'no')
-         {
-           myObj = $('#'+entry+'-'+myActID)
-          if (myObj[0].nodeName == "SELECT")
-            {
-              $('#'+entry+'-'+myActID).val(myStackings[key][entry]).selectmenu('refresh');
-            }
-          else
-            {
-              myObj[0].value = myStackings[key][entry]
-            }
-         }
-      }
+	for (var entry in myStackings[key])
+	  {
+		if (entry != 'no')
+		 {
+		   myObj = $('#'+entry+'-'+myActID)
+		  if (myObj[0].nodeName == "SELECT")
+			{
+			  $('#'+entry+'-'+myActID).val(myStackings[key][entry]).selectmenu('refresh');
+			}
+		  else
+			{
+			  myObj[0].value = myStackings[key][entry]
+			}
+		 }
+	  }
   }
   for (var key in myItems )
   {
@@ -455,7 +456,7 @@ function StackValue2Screen()
 	   myItems[key]['apStack'] = ""
 	}
 	$(myObj).children().remove().end();
-    $(myObj).append(myOptions).val(myActValue).selectmenu('refresh');
+	$(myObj).append(myOptions).val(myActValue).selectmenu('refresh');
   }
   
 }
@@ -493,23 +494,23 @@ function changedStack(that)
 function SetSelectItem()
 //****************************************
 {
-	if (myTimeSettings.ItemType == "Database")
+	if (myTimeSettings.apDataSource == "Database")
   {
-    var myType ="Series"
+	var myType ="Series"
   }
   else
   {
-    var myType ="ListItems"
+	var myType ="ListItems"
   }
   myItemList = ""
   $.each(mySerieItems[myType], function(idx, myItem){
-    myItemList += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
+	myItemList += "<option value=\"" + myItem + "\">" +	 myItem	 + "</option>";
 	})
 
 	ExposureList = ""
 	$.each(myExposures, function(idx, myItem){
 	ExposureList += "<option value=\"" + myItem + "\">" +  myItem  + "</option>";
-	})   
+	})	 
 
 	for (key in myItems)
 	{
@@ -710,45 +711,66 @@ function selectChanged(myObj)
   console.log(myObj);
   switch(myObj.name)
   {
-    case 'btn_StartTime' :
-    {
-      console.log("btn_StartTime")
-      myTimeSettings.StartType = myObj.value;
-      break;
-    }
-    case 'btn_EndTime' :
-    {
-      console.log("btn_EndTime")
-      myTimeSettings.EndType = myObj.value;
-      break;
-    }
-    case 'selDuration' :
-    {
-      $('#txtDuration')[0].value = myObj.value;
-      myTimeSettings.Duration = myObj.value;
-      break;
-    }
-    case 'apDataSource' :
-    {
-      myTimeSettings.ItemType  = myObj.value;
-      SetSelectItem();
-      break;
-    }
+	case 'btn_StartTime' :
+	{
+	  console.log("btn_StartTime")
+	  myTimeSettings.StartType = myObj.value;
+	  break;
+	}
+	case 'btn_EndTime' :
+	{
+	  console.log("btn_EndTime")
+	  myTimeSettings.EndType = myObj.value;
+	  break;
+	}
+	case 'selDuration' :
+	{
+	  $('#Duration')[0].value = myObj.value;
+	  myTimeSettings.Duration = myObj.value;
+	  break;
+	}
+	case 'apDataSource' :
+	{
+	  myTimeSettings.apDataSource  = myObj.value;
+	  SetSelectItem();
+	  break;
+	}
   }
  isItem = myObj.id.search("apItem-") == 0 ? true : false
  if (isItem)
   {
-    myActId=myObj.id.split("-")[1]
-    myItems[myActId]['apItem'] = myObj.value;
-    myHeadLine = document.getElementById("itemsetting-"+myActId)
-    myText = myHeadLine.children[0].innerHTML
-    myNewText=myText.split(">")[0]+">" + myObj.value
-    myNewText += myText.substr(myText.search("<span",189))
-    
-    myHeadLine.children[0].innerHTML  = myNewText
+	myActId=myObj.id.split("-")[1]
+	myItems[myActId]['apItem'] = myObj.value;
+	myHeadLine = document.getElementById("itemsetting-"+myActId)
+	myText = myHeadLine.children[0].innerHTML
+	myNewText=myText.split(">")[0]+">" + myObj.value
+	myNewText += myText.substr(myText.search("<span",189))
+	
+	myHeadLine.children[0].innerHTML  = myNewText
   }
 
 }
+//****************************************
+function SetTimeSettings()
+//****************************************
+{
+	myDate= new Date()
+	document.getElementById("StartDate").value= myTimeSettings.StartDate
+	document.getElementById("StartTime").value= myTimeSettings.StartTime
+	
+	document.getElementById("EndDate").value= myTimeSettings.EndDate
+	document.getElementById("EndTime").value= myTimeSettings.EndTime
+	
+	document.getElementById("Duration").value= myTimeSettings.Duration
+	
+	$('#apDataSource').val(myTimeSettings.apDataSource).selectmenu('refresh');
+	setCheckRadio('btn_StartTime', 'btn_StartTime_'+ myTimeSettings.StartType)
+	setCheckRadio('btn_EndTime'	 , 'btn_EndTime_'  + myTimeSettings.StartType)
+	//$('#StartDate').prop('disabled',true);
+	
+	
+}
+	
 //****************************************
 function SetupPage(event, ui)
 //****************************************
@@ -761,7 +783,7 @@ function SetupPage(event, ui)
 	//var modes = io.aggregates.concat(['minmax', 'minmaxavg']);
 	modeslist = ""
 	$.each(modes, function(idx, mode){
-	modeslist += "<option value=\"" + mode + "\">" +  mode  + "</option>";
+	modeslist += "<option value=\"" + mode + "\">" +  mode	+ "</option>";
 	})
 
 	
@@ -771,178 +793,16 @@ function SetupPage(event, ui)
 	StackValue2Screen(false);
 	Items2Screen(false);
 	SetSelectItem();
-
-	
-
-	myDate= new Date()
-	document.getElementById("StartDate").value= myDate.toJSON().slice(0, 4) +'-01-01'
-	document.getElementById("EndDate").value= myDate.toJSON().slice(0, 10);
-	document.getElementById("EndTime").value= myDate.toJSON().slice(11, 16)
+	SetTimeSettings();
   
-
-  //$('#StartDate').prop('disabled',true);
 
   // start plot display on button click
-  $('#apSubmit ').on('click', function(event,ui){
+  $('#apSubmit ').on('click', function(event,ui){drawPlot(event, ui)});
   
-    var plot = $('[id*="analyse-plotpopup"]');
-    var plotId = plot.attr('id');
-    var that = plot.data().svWidget;
-            
-    // stop subscription for actual plot
-    if (io.stopseries )
-      io.stopseries(plot);
-    that.element.highcharts().destroy();
-    var apSeries = "", apCount = "", apExposure = "", apColor = "", apMode = "", apLabel = "", apAssign = "", apStacking = "", apStacks = "", apBaseItems = "";
-
-    // Data source: database or item
-    var apDataSource = $('#apDataSource').val().toString() || 'database';
-
-    // time axis
-    var apTmin = $('#apTmin').val().toString() || '1h';
-    var apTmax = $('#apTmax').val().toString() || 'now';
-    
-    //y-axis parameters for 4 axes				
-    var apYmins = [], apYmaxs = [], apYtypes = [],apYposs = [], apYunits = [];
-    // check active axis with highest number
-    for (var i=1; i<5; i++){
-      if ($('#apYact'+i).prop('checked'))
-        var apMaxYaxis = i;
-    }
-    // evaluate settings up to highest active axis
-    for (var i=1; i<apMaxYaxis+1; i++){
-      apYmins[i-1]  = $('#apYmin'+i).val().toString() || ''; 
-      apYmaxs [i-1] = $('#apYmax'+i).val().toString() || '';
-      apYtypes[i-1] = $('#apYtype'+i).val().toString();
-      apYposs[i-1]  = $('#apYpos' +i).val().toString();
-      apYunits[i-1] = $('#apYunit' +i).val().toString() || '';
-    }
-    var apYmin = apYmins.join(',');
-    var apYmax = apYmaxs.join(',');
-    var apYtype = apYtypes.join(',');
-    var apYpos = apYposs.join(',');
-    var apYunit = apYunits.join(',');
-    var apChartopts = $('#apChartopts').val() || '';
-
-    // item specific settings organized in 5 tabs
-    for (var source = 1; source < 6; source++){
-      var apItems = $('#apItem'+ source).val().toString().split(/,\s*/);
-      if (apItems =='')
-        apItems = null;
-      var apModes = $('#apMode-' + source).val().toString();
-      var apCounts = $('#apCount' + source).val().toString().split(/,\s*/);
-      var apExposures = $('#apExposure' + source).val().toString().split(/,\s*/);
-      var apColors = $('#apColor' + source).val().toString().split(/,\s*/);
-      var apAssigns = $('#apAssign' + source).val().toString().split(/,\s*/);
-      var apStackings = $('#apStacking' + source).val().toString().split(/,\s*/);
-      var apStackss = $('#apStacks' + source).val().toString().split(/,\s*/);
-
-      // every tab can have more than one item
-      $.each(apItems, function(idx, apItem){
-        var delimiter = (idx == 0 && source== 1) ? '': ',';
-        if (apSeries != '')
-          apSeries += ',';
-        if (apCounts[idx] == undefined || apCounts[idx] == '')
-          apCounts[idx] = 100;
-        if (apExposures[idx] == undefined || apExposures[idx] == '')
-          apExposures[idx] = 'line';
-        if (apColors[idx] == undefined) 
-          apColors[idx] = '';
-        if (apAssigns[idx] == undefined || apAssigns[idx] == '')
-          apAssigns[idx] = 1;
-        if (apStackings[idx] == undefined || apStackings[idx] == '') 
-          apStackings[idx] = 'normal';
-        if (apStackss[idx] == undefined) 
-          apStackss[idx] = '';
-        if (apDataSource == 'database'){
-          if (apModes.indexOf("minmax") == 0){
-            apSeries += [apItem, "min", apTmin, apTmax, apCounts[idx]].join('.') +',';
-            apSeries += [apItem, "max", apTmin, apTmax, apCounts[idx]].join('.');
-            if (apModes == "minmaxavg")
-              apSeries += ',' + [apItem, "avg", apTmin, apTmax, apCounts[idx]].join('.');
-          } else
-              apSeries += [apItem, apModes, apTmin, apTmax, apCounts[idx]].join('.');
-        } else
-          apSeries += apItem;
-
-        apLabel += delimiter + apItem;
-        apCount += delimiter + apCounts[idx];
-        apExposure += delimiter + apExposures[idx];
-        apColor += delimiter + apColors[idx];
-        apMode += delimiter + apModes;
-        apAssign += delimiter + apAssigns[idx];
-        apStacking += delimiter + apStackings[idx];
-        apStacks += delimiter + apStackss[idx];
-        apBaseItems += delimiter + apItem;
-      })
-    }
-
-    // populate widget parameters from input elements
-    plot.attr('data-tmin', apTmin);
-    that.options.tmin = apTmin;
-    plot.attr('data-tmax', apTmax);
-    that.options.tmax = apTmax;
-    plot.attr('data-ymin', apYmin);
-    that.options.ymin = apYmin;
-    plot.attr('data-ymax', apYmax);
-    that.options.ymax = apYmax;
-    plot.attr('data-ytype', apYtype);
-    that.options.ytype = apYtype;
-    plot.attr('data-opposite', apYpos);
-    that.options.opposite = apYpos;
-    plot.attr('data-unit', apYunit);
-    that.options.unit = apYunit;
-    plot.attr('data-chart-options', apChartopts);
-    if (apChartopts != undefined && apChartopts != ''){
-      try {that.options.chartOptions = JSON.parse(apChartopts);} 
-      catch(error){notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {"rangeSelector":{"selected":"2"}}');}
-    }
-    
-    plot.attr('data-item',  apSeries);
-    that.options.item = apSeries;
-    that.items = apSeries.split(',');
-    plot.attr('data-mode',  apMode);
-    that.options.mode = apMode;
-    plot.attr('data-count', apCount);
-    that.options.count = apCount;
-    plot.attr('data-exposure', apExposure);
-    that.options.exposure = apExposure;
-    plot.attr('data-color', apColor);
-    that.options.color = apColor;
-    plot.attr('data-label', apLabel);
-    that.options.label = apLabel;
-    plot.attr('data-assign', apAssign);
-    that.options.assign = apAssign;
-    plot.attr('data-stacking', apStacking);
-    that.options.stacking = apStacking;
-    plot.attr('data-stacks', apStacks);
-    that.options.stacks = apStacks;
-    
-    that._create()
-            
-    // start new series subscription
-    if (io.startseries)
-      io.startseries(plot);
-      
-    // update widget code display field
-    var widgetCode = ["''", setWidgetParam(apBaseItems, ''), setWidgetParam(apMode, 'avg'), setWidgetParam(apTmin, '1h'), setWidgetParam(apTmax, 'now'), setWidgetParam(apYmin, ''), setWidgetParam(apYmax, ''),
-             setWidgetParam(apCount, '100'), setWidgetParam(apLabel, ''), setWidgetParam(apColor, ''), setWidgetParam(apExposure, 'line'), "''", "'advanced'", setWidgetParam(apAssign, ''),
-             setWidgetParam(apYpos, ''), "''", setWidgetParam(apYtype, 'linear'), setWidgetParam(apYunit, ''), 	apChartopts ? apChartopts: "''", setWidgetParam(apStacking, 'normal'), setWidgetParam(apStacks, ''), "2", 
-             "'"+apDataSource+"'"	].join(', '); 
-    var widgetCodeHtml = $('#apWidgetCode').html();
-    $('#apWidgetCode').html(widgetCodeHtml.replace(/period\(.*\)/, 'period('+widgetCode+')'));
-  });
   
-  function setWidgetParam(widgetParam, defaultValue){
-    if (widgetParam.split(/,\s*/).every(function(element){return element == defaultValue}))
-      widgetParam = '';
-    var paramLength = widgetParam.split(',').length;
-    var ret = paramLength > 1 ? "['":"'";
-    ret += widgetParam.split(/,\s*/).join("', '");
-    ret += paramLength > 1 ? "']" : "'";
-    return ret;
-  }
 };
+
+
 
 
 
@@ -950,6 +810,235 @@ function SetupPage(event, ui)
 // Some helper function
 //************************************************************
 
+
+function drawPlot(event, ui)
+	{
+  
+	var plot = $('[id*="analyse-plotpopup"]');
+	var plotId = plot.attr('id');
+	var that = plot.data().svWidget;
+			
+	// stop subscription for actual plot
+	if (io.stopseries )
+	  io.stopseries(plot);
+	that.element.highcharts().destroy();
+	var apSeries = "", apCount = "", apExposure = "", apColor = "", apMode = "", apLabel = "", apAssign = "", apStacking = "", apStacks = "", apBaseItems = "";
+
+	// Data source: database or item
+	var apDataSource = myTimeSettings.apDataSource.toLowerCase() || 'database';
+
+	// time axis
+	if (myTimeSettings.StartType == "1")
+	{
+		var apTmin = myTimeSettings.Duration || '1d';
+	}
+	else
+	{
+		try {
+		var apTmin = Date.parse(myTimeSettings.StartDate + " " + myTimeSettings.StartTime)
+		}
+		catch (error)
+		{
+		}
+	}
+	
+	if (myTimeSettings.EndType == "1")
+	{
+		var apTmax = 'now';
+	}
+	else
+	{
+		try {
+		var apTmax = Date.parse(myTimeSettings.EndDate + " " + myTimeSettings.EndTime)
+		}
+		catch (error)
+		{
+		}
+	}
+	
+	
+	/*
+	//y-axis parameters for 4 axes				
+	var apYmins = [], apYmaxs = [], apYtypes = [],apYposs = [], apYunits = [];
+	// check active axis with highest number
+	for (var i=1; i<5; i++){
+	  if ($('#apYact'+i).prop('checked'))
+		var apMaxYaxis = i;
+	}
+	*/
+	
+	// y-axis parameters for all axes
+	i = 0
+	var apYmins = [], apYmaxs = [], apYtypes = [],apYposs = [], apYunits = [];
+	for (key in myYAxis)
+	{
+		apYmins[i]	= myYAxis[key].apYmin;
+		apYmaxs [i] = myYAxis[key].apYmax;
+		apYtypes[i] = myYAxis[key].apYtype;
+		apYposs[i]	= myYAxis[key].apYpos;
+		apYunits[i] = myYAxis[key].apYunit;
+		i += 1
+	}
+	/*
+	// evaluate settings up to highest active axis
+	for (var i=1; i<apMaxYaxis+1; i++){
+	  apYmins[i-1]	= $('#apYmin'+i).val().toString() || ''; 
+	  apYmaxs [i-1] = $('#apYmax'+i).val().toString() || '';
+	  apYtypes[i-1] = $('#apYtype'+i).val().toString();
+	  apYposs[i-1]	= $('#apYpos' +i).val().toString();
+	  apYunits[i-1] = $('#apYunit' +i).val().toString() || '';
+	}
+	*/
+	var apYmin = apYmins.join(',');
+	var apYmax = apYmaxs.join(',');
+	var apYtype = apYtypes.join(',');
+	var apYpos = apYposs.join(',');
+	var apYunit = apYunits.join(',');
+	
+	// get chartoptions
+	var apChartopts = myChartOptions;
+	if (apChartopts != undefined && apChartopts != '')
+	{
+	  try {that.options.chartOptions = JSON.parse(apChartopts);} 
+	  catch(error)
+	  {
+		notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {"rangeSelector":{"selected":"2"}}');
+	  }
+	}
+
+	// Define the stacks
+	i = 0
+	for (key in myStackings)
+	{
+		var delimiter = (i == 0 ? '' : ',');
+		apStacks += delimiter + myStackings[key].apStackExposure;
+		i += 1
+	}
+	var maxStacks = i	// number of defined stacks
+
+	var apItem 	= "";
+	var apCount	= "";
+	var apModes = "";
+	i = 0
+	for (key in myItems)
+	{
+		var delimiter = (i == 0 ? delimiter ='': ',');
+		apItem		 = myItems[key].apItem;
+		apCount		+= delimiter + myItems[key].apCount;
+		apMode		=  myItems[key].apMode;
+		apModes		+= delimiter + apMode;
+		
+		if (apDataSource == 'database')
+		{
+		  if (apMode.indexOf("minmax") == 0)
+		  {
+			apSeries += delimiter + [apItem, "min", apTmin, apTmax, myItems[key].apCount].join('.') +',';
+			apSeries += 			[apItem, "max", apTmin, apTmax, myItems[key].apCount].join('.');
+			if (apMode == "minmaxavg")
+			  apSeries += delimiter + [apItem, "avg", apTmin, apTmax, myItems[key].apCount].join('.');
+		  }
+		  else
+			  apSeries += delimiter + [apItem, apMode, apTmin, apTmax, myItems[key].apCount].join('.');
+		}
+		else
+		  apSeries +=  delimiter + apItem;
+
+		apLabel		+= delimiter + myItems[key].apItem;
+		apExposure	+= delimiter + myItems[key].apExposure;
+		apColor		+= delimiter + myItems[key].apColor;
+		
+		apAssign	+= delimiter + ""+ (parseInt(myYAxis[myItems[key].apAssign].no)-1);
+		if ([myItems[key].apStack] != "")
+		{ apStacking	+= delimiter + "" + (parseInt(myStackings[myItems[key].apStack].no)-1) }
+		else
+		{
+			if (maxStacks > 0)
+			{ apStacking	+= delimiter + "" + (maxStacks) } 
+				
+		}
+
+		apBaseItems += delimiter + myItems[key].apItem;
+		i +=1
+	}
+	
+		
+	// OK till here
+	
+	
+	
+
+	// populate widget parameters from input elements
+	plot.attr('data-tmin', apTmin);
+	that.options.tmin = apTmin;
+	plot.attr('data-tmax', apTmax);
+	that.options.tmax = apTmax;
+	plot.attr('data-ymin', apYmin);
+	that.options.ymin = apYmin;
+	plot.attr('data-ymax', apYmax);
+	that.options.ymax = apYmax;
+	plot.attr('data-ytype', apYtype);
+	that.options.ytype = apYtype;
+	plot.attr('data-opposite', apYpos);
+	that.options.opposite = apYpos;
+	plot.attr('data-unit', apYunit);
+	that.options.unit = apYunit;
+	plot.attr('data-chart-options', apChartopts);
+	if (apChartopts != undefined && apChartopts != ''){
+	  try {that.options.chartOptions = JSON.parse(apChartopts);} 
+	  catch(error){notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {"rangeSelector":{"selected":"2"}}');}
+	}
+	
+	plot.attr('data-item',	apSeries);
+	that.options.item = apSeries;
+	that.items = apSeries.split(',');
+	plot.attr('data-mode',	apModes);
+	that.options.mode = apModes;
+	plot.attr('data-count', apCount);
+	that.options.count = apCount;
+	plot.attr('data-exposure', apExposure);
+	that.options.exposure = apExposure;
+	plot.attr('data-color', apColor);
+	that.options.color = apColor;
+	plot.attr('data-label', apLabel);
+	that.options.label = apLabel;
+	plot.attr('data-assign', apAssign);
+	that.options.assign = apAssign;
+	plot.attr('data-stacking', apStacks);
+	that.options.stacking = apStacks	;
+	plot.attr('data-stacks', apStacking);
+	that.options.stacks = apStacking;
+	
+	that._create()
+			
+	// start new series subscription
+	if (io.startseries)
+	  io.startseries(plot);
+	  
+	// update widget code display field
+	var widgetCode = ["''", setWidgetParam(apBaseItems, ''), setWidgetParam(apMode, 'avg'), setWidgetParam(apTmin, '1h'), setWidgetParam(apTmax, 'now'), setWidgetParam(apYmin, ''), setWidgetParam(apYmax, ''),
+			 setWidgetParam(apCount, '100'), setWidgetParam(apLabel, ''), setWidgetParam(apColor, ''), setWidgetParam(apExposure, 'line'), "''", "'advanced'", setWidgetParam(apAssign, ''),
+			 setWidgetParam(apYpos, ''), "''", setWidgetParam(apYtype, 'linear'), setWidgetParam(apYunit, ''),	apChartopts ? apChartopts: "''", setWidgetParam(apStacking, 'normal'), setWidgetParam(apStacks, ''), "2", 
+			 "'"+apDataSource+"'"	].join(', '); 
+	var widgetCodeHtml = $('#apWidgetCode').html();
+	$('#apWidgetCode').html(widgetCodeHtml.replace(/period\(.*\)/, 'period('+widgetCode+')'));
+  }
+
+
+
+
+//*****************************************
+function setWidgetParam(widgetParam, defaultValue)
+//*****************************************
+{
+	if (widgetParam.split(/,\s*/).every(function(element){return element == defaultValue}))
+	  widgetParam = '';
+	var paramLength = widgetParam.split(',').length;
+	var ret = paramLength > 1 ? "['":"'";
+	ret += widgetParam.split(/,\s*/).join("', '");
+	ret += paramLength > 1 ? "']" : "'";
+	return ret;
+}
+  
 //*****************************************
 function getCheckRadio(myRadioName)
 //*****************************************
@@ -958,9 +1047,9 @@ var radios = document.getElementsByName(myRadioName);
 
 for (var i = 0, length = radios.length; i < length; i++) {
   if (radios[i].checked) {
-    var retVal = radios[i].id
-    // only one radio can be logically checked, don't check the rest
-    break;
+	var retVal = radios[i].id
+	// only one radio can be logically checked, don't check the rest
+	break;
   }
 }
 return retVal
@@ -973,12 +1062,12 @@ function setCheckRadio(myRadioName, radioID)
   var radios = document.getElementsByName(myRadioName);
 
   for (var i = 0, length = radios.length; i < length; i++) {
-    if (radios[i].id == radioID) {
-      $("#"+radios[i].id).click()
-      $("#"+radios[i].id).click()
-      // only one radio can be logically checked, don't check the rest
-      break;
-    }
+	if (radios[i].id == radioID) {
+	  $("#"+radios[i].id).click()
+	  $("#"+radios[i].id).click()
+	  // only one radio can be logically checked, don't check the rest
+	  break;
+	}
   }
 }
 
@@ -989,30 +1078,32 @@ function LoadSet(that)
 {
 	myFileName = that.value
 	$.ajax({
-      url: "apps/app_analyzer_comfort.php",
-      type: "GET",
-         data: {
-              command  : 'get_set_settings',
-              filename : myFileName
-             },
-      contentType: "application/json; charset=utf-8",
-      success: function (response) {
-        console.log('Status of load set:'+ response );
+	  url: "apps/app_analyzer_comfort.php",
+	  type: "GET",
+		 data: {
+			  command  : 'get_set_settings',
+			  filename : myFileName
+			 },
+	  contentType: "application/json; charset=utf-8",
+	  success: function (response) {
+		console.log('Status of load set:'+ response );
 		data = JSON.parse(response);
-		myTimeSettings 	= data["TimeSettings"]
-		myYAxis 		= data["yAxis"]
+		myTimeSettings	= data["TimeSettings"]
+		myYAxis			= data["yAxis"]
 		myItems			= data["Items"]
-		myChartOptions  = data["chartOptions"]
-		myStackings 	= data["Stackings"]
+		myChartOptions	= data["chartOptions"]
+		myStackings		= data["Stackings"]
 		
+		SetTimeSettings();
 		YAxis2Screen(myYAxis,false);
 		Stacks2Screen(false);
 		Items2Screen(false);
-      },
-      error: function () {
-          notify.message('error', 'Error when loading Set from Backend', 'Please try again');
+		
+	  },
+	  error: function () {
+		  notify.message('error', 'Error when loading Set from Backend', 'Please try again');
 
-      }
+	  }
    });
 }
 
@@ -1028,7 +1119,7 @@ function SaveSetAs()
 	  return;
   }
   storeSet(fileName);
-  mySetList = "<option value=\"" + fileName + "\">" +  fileName  + "</option>";
+  mySetList = "<option value=\"" + fileName + "\">" +  fileName	 + "</option>";
   $('#apLoadSettings').append(mySetList).val(fileName).selectmenu('refresh');
   fileName = document.getElementById('apNewFileName').value = ""
 }
@@ -1056,28 +1147,28 @@ function storeSet(myFileName)
 //************************************************************
 {
   values2Save = {
-                  "TimeSettings" : myTimeSettings,
-                  "yAxis"        : myYAxis,
-                  "Items"        : myItems,
-                  "chartOptions" : myChartOptions,
-                  "Stackings"    : myStackings
-                }
+				  "TimeSettings" : myTimeSettings,
+				  "yAxis"		 : myYAxis,
+				  "Items"		 : myItems,
+				  "chartOptions" : myChartOptions,
+				  "Stackings"	 : myStackings
+				}
   $.ajax({
-      url: "apps/app_analyzer_comfort.php",
-      type: "GET",
-         data: {
-              command : 'store_set_settings',
-              filename : myFileName,
-              data : JSON.stringify(values2Save)
-             },
-      contentType: "application/json; charset=utf-8",
-      success: function (response) {
-        console.log('Status of storing set :'+ response );
-      },
-      error: function () {
-          notify.message('error', 'Error when storing Set to Backend', 'Please try again');
+	  url: "apps/app_analyzer_comfort.php",
+	  type: "GET",
+		 data: {
+			  command : 'store_set_settings',
+			  filename : myFileName,
+			  data : JSON.stringify(values2Save)
+			 },
+	  contentType: "application/json; charset=utf-8",
+	  success: function (response) {
+		console.log('Status of storing set :'+ response );
+	  },
+	  error: function () {
+		  notify.message('error', 'Error when storing Set to Backend', 'Please try again');
 
-      }
+	  }
    });
 }
 
@@ -1086,21 +1177,21 @@ function GetSeriesItems()
 //****************************************
 {
 $.ajax({
-    url: "apps/app_analyzer_comfort.php",
-    type: "GET",
+	url: "apps/app_analyzer_comfort.php",
+	type: "GET",
 		   data: {
-			   		command : 'get_set_series_items'
-			   	 },
-    contentType: "application/json; charset=utf-8",
-    success: function (response) {
-    	console.log('Status of get serie-items :'+ response );
-      mySerieItems = JSON.parse(response);
-      SetSelectItem();
-    },
-    error: function () {
-        console.log("Error - while gettins series")
+					command : 'get_set_series_items'
+				 },
+	contentType: "application/json; charset=utf-8",
+	success: function (response) {
+		console.log('Status of get serie-items :'+ response );
+	  mySerieItems = JSON.parse(response);
+	  SetSelectItem();
+	},
+	error: function () {
+		console.log("Error - while gettins series")
 
-    }
+	}
  });	
 
 
@@ -1111,30 +1202,30 @@ function GetAllSets()
 //************************************************************
 {
 $.ajax({
-    url: "apps/app_analyzer_comfort.php",
-    type: "GET",
+	url: "apps/app_analyzer_comfort.php",
+	type: "GET",
 		   data: {
-			   		command : 'getFileArray',
-            suffix  : '.pac'
-			   	 },
-    contentType: "application/json; charset=utf-8",
-    success: function (response) {
-    	console.log('Status get all sets :'+ response );
-      setlistJson = JSON.parse(response)
-      mySetList = ""
+					command : 'getFileArray',
+			suffix	: '.pac'
+				 },
+	contentType: "application/json; charset=utf-8",
+	success: function (response) {
+		console.log('Status get all sets :'+ response );
+	  setlistJson = JSON.parse(response)
+	  mySetList = ""
 	  var firstSet = ""
-      $.each(setlistJson, function(idx, mySet){
-        mySet = mySet.split('.')[0]
+	  $.each(setlistJson, function(idx, mySet){
+		mySet = mySet.split('.')[0]
 		if (firstSet == "")	{ firstSet = mySet }
-        mySetList += "<option value=\"" + mySet + "\">" +  mySet  + "</option>";
-      })
-     
-       $('#apLoadSettings').children().remove().end();
-       $('#apLoadSettings').append(mySetList).val('').selectmenu('refresh');
-    },
-    error: function () {
-        console.log("Error - while storing settings")
+		mySetList += "<option value=\"" + mySet + "\">" +  mySet  + "</option>";
+	  })
+	 
+	   $('#apLoadSettings').children().remove().end();
+	   $('#apLoadSettings').append(mySetList).val('').selectmenu('refresh');
+	},
+	error: function () {
+		console.log("Error - while storing settings")
 
-    }
+	}
  });
 }
