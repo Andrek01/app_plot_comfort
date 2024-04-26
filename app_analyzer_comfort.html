@@ -350,19 +350,23 @@
 			</div>
 	</div>
 	<br>
-	<h2>Generated widget code: </h2>
-	<div id="apWidgetCode" class="twig">
+	<h2>Generated widget code:</h2>
+		
+	
+	<div id="apWidgetCode" class="twig" style="min-height:58px">
 			{% filter trim|escape|nl2br %}{% verbatim %}
 			{{ plot.period(...) }}
 			{% endverbatim %}{% endfilter %}
 	</div>
+	<hr />	
+	<button id="CopytoClipboard" onclick="copyWidget2Clipboard()">Copy to Widget Code to Clipboard </button>
 /**	options not (yet) used
 	data-axis = [ x axix name and y axis name(s) ]
 	data-ycolor = [colors of y axes ]
 */
 
 
-	<hr />
+
 {% endblock %}
 
 

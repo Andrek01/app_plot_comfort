@@ -482,7 +482,7 @@ function changedStack(that)
 {
 	myActName=that.id.split("-")[0]
 	myActId=that.id.split("-")[1]
-	myStackings[myActID][myActName] = that.value
+	myStackings[myActId][myActName] = that.value
 }
 
 
@@ -835,7 +835,7 @@ function drawPlot(event, ui)
 	else
 	{
 		try {
-		var apTmin = Date.parse(myTimeSettings.StartDate + " " + myTimeSettings.StartTime)
+		var apTmin = "" + Date.parse(myTimeSettings.StartDate + " " + myTimeSettings.StartTime)
 		}
 		catch (error)
 		{
@@ -849,23 +849,12 @@ function drawPlot(event, ui)
 	else
 	{
 		try {
-		var apTmax = Date.parse(myTimeSettings.EndDate + " " + myTimeSettings.EndTime)
+		var apTmax = "" + Date.parse(myTimeSettings.EndDate + " " + myTimeSettings.EndTime)
 		}
 		catch (error)
 		{
 		}
 	}
-	
-	
-	/*
-	//y-axis parameters for 4 axes				
-	var apYmins = [], apYmaxs = [], apYtypes = [],apYposs = [], apYunits = [];
-	// check active axis with highest number
-	for (var i=1; i<5; i++){
-	  if ($('#apYact'+i).prop('checked'))
-		var apMaxYaxis = i;
-	}
-	*/
 	
 	// y-axis parameters for all axes
 	i = 0
@@ -879,16 +868,7 @@ function drawPlot(event, ui)
 		apYunits[i] = myYAxis[key].apYunit;
 		i += 1
 	}
-	/*
-	// evaluate settings up to highest active axis
-	for (var i=1; i<apMaxYaxis+1; i++){
-	  apYmins[i-1]	= $('#apYmin'+i).val().toString() || ''; 
-	  apYmaxs [i-1] = $('#apYmax'+i).val().toString() || '';
-	  apYtypes[i-1] = $('#apYtype'+i).val().toString();
-	  apYposs[i-1]	= $('#apYpos' +i).val().toString();
-	  apYunits[i-1] = $('#apYunit' +i).val().toString() || '';
-	}
-	*/
+
 	var apYmin = apYmins.join(',');
 	var apYmax = apYmaxs.join(',');
 	var apYtype = apYtypes.join(',');
@@ -911,7 +891,7 @@ function drawPlot(event, ui)
 	for (key in myStackings)
 	{
 		var delimiter = (i == 0 ? '' : ',');
-		apStacks += delimiter + myStackings[key].apStackExposure;
+		apStacks += delimiter + myStackings[key].apStackType;
 		i += 1
 	}
 	var maxStacks = i	// number of defined stacks
@@ -947,7 +927,7 @@ function drawPlot(event, ui)
 		apExposure	+= delimiter + myItems[key].apExposure;
 		apColor		+= delimiter + myItems[key].apColor;
 		
-		apAssign	+= delimiter + ""+ (parseInt(myYAxis[myItems[key].apAssign].no)-1);
+		apAssign	+= delimiter + ""+ (parseInt(myYAxis[myItems[key].apAssign].no));
 		if ([myItems[key].apStack] != "")
 		{ apStacking	+= delimiter + "" + (parseInt(myStackings[myItems[key].apStack].no)-1) }
 		else
@@ -960,12 +940,6 @@ function drawPlot(event, ui)
 		apBaseItems += delimiter + myItems[key].apItem;
 		i +=1
 	}
-	
-		
-	// OK till here
-	
-	
-	
 
 	// populate widget parameters from input elements
 	plot.attr('data-tmin', apTmin);
@@ -1017,21 +991,73 @@ function drawPlot(event, ui)
 	// update widget code display field
 	var widgetCode = ["''", setWidgetParam(apBaseItems, ''), setWidgetParam(apMode, 'avg'), setWidgetParam(apTmin, '1h'), setWidgetParam(apTmax, 'now'), setWidgetParam(apYmin, ''), setWidgetParam(apYmax, ''),
 			 setWidgetParam(apCount, '100'), setWidgetParam(apLabel, ''), setWidgetParam(apColor, ''), setWidgetParam(apExposure, 'line'), "''", "'advanced'", setWidgetParam(apAssign, ''),
-			 setWidgetParam(apYpos, ''), "''", setWidgetParam(apYtype, 'linear'), setWidgetParam(apYunit, ''),	apChartopts ? apChartopts: "''", setWidgetParam(apStacking, 'normal'), setWidgetParam(apStacks, ''), "2", 
+			 setWidgetParam(apYpos, ''), "''", setWidgetParam(apYtype, 'linear'), setWidgetParam(apYunit, ''),	apChartopts ? apChartopts: "''", setWidgetParam(apStacks, 'normal'), setWidgetParam(apStacking, ''), "2", 
 			 "'"+apDataSource+"'"	].join(', '); 
 	var widgetCodeHtml = $('#apWidgetCode').html();
 	$('#apWidgetCode').html(widgetCodeHtml.replace(/period\(.*\)/, 'period('+widgetCode+')'));
   }
 
 
-
+//*****************************************
+function copyWidget2Clipboard()
+//*****************************************
+{
+	myWidgetText=$("#apWidgetCode")[0].innerText;
+	copyToClipboard(myWidgetText);
+}
+	
+// ************************************************************************
+// copyToClipboard - copies the finalized Widget to the Clipboard
+// ************************************************************************
+const copyToClipboard = str => {
+	  const el = document.createElement('textarea');  // Create a <textarea>
+														// element
+	  el.value = str;                                 // Set its value to the
+														// string that you want
+														// copied
+	  el.setAttribute('readonly', '');                // Make it readonly to
+														// be tamper-proof
+	  el.style.position = 'absolute';                 
+	  el.style.left = '-9999px';                      // Move outside the
+														// screen to make it
+														// invisible
+	  document.body.appendChild(el);                  // Append the <textarea>
+														// element to the HTML
+														// document
+	  const selected =            
+	    document.getSelection().rangeCount > 0        // Check if there is any
+														// content selected
+														// previously
+	      ? document.getSelection().getRangeAt(0)     // Store selection if
+														// found
+	      : false;                                    // Mark as false to know
+														// no selection existed
+														// before
+	  el.select();                                    // Select the <textarea>
+														// content
+	  document.execCommand('copy');                   // Copy - only works as
+														// a result of a user
+														// action (e.g. click
+														// events)
+	  document.body.removeChild(el);                  // Remove the <textarea>
+														// element
+	  if (selected) {                                 // If a selection
+														// existed before
+														// copying
+	    document.getSelection().removeAllRanges();    // Unselect everything
+														// on the HTML document
+	    document.getSelection().addRange(selected);   // Restore the original
+														// selection
+	  }
+	};
 
 //*****************************************
 function setWidgetParam(widgetParam, defaultValue)
 //*****************************************
 {
 	if (widgetParam.split(/,\s*/).every(function(element){return element == defaultValue}))
-	  widgetParam = '';
+	ret = "";
+	//widgetParam = '';
 	var paramLength = widgetParam.split(',').length;
 	var ret = paramLength > 1 ? "['":"'";
 	ret += widgetParam.split(/,\s*/).join("', '");
