@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # Create_Series_item.py
 
-#!!!!!!!!!!!!!!!!!!!! Important !!!!!!!!!!!!!!!
-# Please change "smartvisu_pages" to your plugin-instance-name
-# of the smartvisu-plugin
-#!!!!!!!!!!!!!!!!!!!! Important !!!!!!!!!!!!!!!
+myPlugins=sh.plugins
+for plugin in myPlugins:
+  if ('smartvisu' in str(plugin).lower()):
+    myInstance = plugin
+    break
 
-svDir = sh.smartvisu_pages.smartvisu_dir + '/pages/'                # <- change here
-svPage = sh.smartvisu_pages.read_from_sv_configini('pages')         # <- change here
+svDir = myInstance.smartvisu_dir + '/pages/'                
+svPage = myInstance.read_from_sv_configini('pages')         
 
 from lib.item import Items
 items = Items.get_instance()
