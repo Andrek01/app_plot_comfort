@@ -35,7 +35,7 @@ var tmplYAxis = {}
 tmplYAxis['no']= yAxisCount
 tmplYAxis['apYmin']		= ""
 tmplYAxis['apYmax']		= ""
-tmplYAxis['apYpos']		= "0"
+tmplYAxis['apYpos']		= "1"
 tmplYAxis['apYtype']	= "linear"
 tmplYAxis['apYunit']	= ""
 newAxisID="0001"
@@ -137,7 +137,7 @@ var tmplStacks =  '<tr>\
 					<select id="apStackType-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="normal">normal</option><option value="percent">percent</option></select>\
 					</td>\
 					<td style = "text-align:center;">\
-					<select id="apStackExposure-{id}" data-native-menu="false" onchange="changedStack(this)"><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
+					<select id="apStackExposure-{id}" data-native-menu="false" onchange="changedStack(this)" onblur="changedStack(this)"><option value="areastack">areastack</option><option value="linestack">linestack</option></option><option value="columnstack">columnstack</option></select>\
 					</td>\
 					<td>\
 					<div class="tooltip">\
@@ -263,6 +263,22 @@ function itemChange(that)
   myActType=that.id.split("-")[0]
   myActId=that.id.split("-")[1]
   myItems[myActId][myActType] = that.value
+  switch (that.id.split("-")[0])
+  {
+    case 'apStack' :
+    {
+      var stackhCanged = false
+      for (key in myItems)
+        {
+          if (myItems[key].apStack == that.value && that.value != "0000")
+          { 
+            myItems[key].apExposure = myStackings[that.value].apStackExposure
+            stackhCanged = true
+          }
+        }
+      if (stackhCanged) { ItemValue2Screen() }
+    }
+  }
 }
 
 
@@ -291,6 +307,7 @@ function deleteYAxis(button)
 	myActId=button.id.split("-")[1]
 	delete myYAxis[myActId]
 	YAxis2Screen(myYAxis,false)
+  validateValues(button.id.split("-")[0], myActId)
 }
 
 //****************************************
@@ -424,7 +441,7 @@ function StackValue2Screen()
 {
   myOptions = "";
   // add a blank line
-  myOptions += "<option value=\"" + '0000' + "\">" +  '&nbsp;'	+ "</option>";
+  myOptions += "<option value=\"" + "0000" + "\">" +  '&nbsp;'	+ "</option>";
   for (var key in myStackings )
   {
 	myOptions += "<option value=\"" + key + "\">" +	 myStackings[key]['no']	 + "</option>";
@@ -452,7 +469,7 @@ function StackValue2Screen()
 	if (myStackings[myActValue] == undefined)
 	{
 	   // Stack disappeared
-	   myValue="0000"
+	   myValue="0000" 
 	   myItems[key]['apStack'] = ""
 	}
 	$(myObj).children().remove().end();
@@ -474,6 +491,7 @@ function deleteStack(button)
 	myActId=button.id.split("-")[1]
 	delete myStackings[myActId]
 	Stacks2Screen(false)
+  validateValues(button.id.split("-")[0],myActId)
 }
 
 //****************************************
@@ -483,6 +501,24 @@ function changedStack(that)
 	myActName=that.id.split("-")[0]
 	myActId=that.id.split("-")[1]
 	myStackings[myActId][myActName] = that.value
+  switch (that.id.split("-")[0])
+  {
+    case 'apStackExposure' :
+    {
+      var stackhCanged = false
+      for (key in myItems)
+        {
+          if (myItems[key].apStack == myActId )
+          { 
+            myItems[key].apExposure = myStackings[myActId].apStackExposure
+            stackhCanged = true
+          }
+        }
+      if (stackhCanged) { ItemValue2Screen() }
+    }
+  }
+  
+  
 }
 
 
@@ -904,6 +940,8 @@ function drawPlot(event, ui)
 	{
 		var delimiter = (i == 0 ? delimiter ='': ',');
 		apItem		 = myItems[key].apItem;
+    if (apDataSource == 'item')                 // if set is based on Lists, clear the widget buffer, if not chart will not be redrawn
+      widget.buffer[apItem]=[]
 		apCount		+= delimiter + myItems[key].apCount;
 		apMode		=  myItems[key].apMode;
 		apModes		+= delimiter + apMode;
@@ -928,7 +966,7 @@ function drawPlot(event, ui)
 		apColor		+= delimiter + myItems[key].apColor;
 		
 		apAssign	+= delimiter + ""+ (parseInt(myYAxis[myItems[key].apAssign].no));
-		if ([myItems[key].apStack] != "")
+		if (myItems[key].apStack != "" && myItems[key].apStack != "0000")
 		{ apStacking	+= delimiter + "" + (parseInt(myStackings[myItems[key].apStack].no)-1) }
 		else
 		{
@@ -987,7 +1025,10 @@ function drawPlot(event, ui)
 	// start new series subscription
 	if (io.startseries)
 	  io.startseries(plot);
-	  
+	// if Items are selected
+  if (apDataSource == 'item')
+    io.monitor();
+
 	// update widget code display field
 	var widgetCode = ["''", setWidgetParam(apBaseItems, ''), setWidgetParam(apMode, 'avg'), setWidgetParam(apTmin, '1h'), setWidgetParam(apTmax, 'now'), setWidgetParam(apYmin, ''), setWidgetParam(apYmax, ''),
 			 setWidgetParam(apCount, '100'), setWidgetParam(apLabel, ''), setWidgetParam(apColor, ''), setWidgetParam(apExposure, 'line'), "''", "'advanced'", setWidgetParam(apAssign, ''),
@@ -997,6 +1038,55 @@ function drawPlot(event, ui)
 	$('#apWidgetCode').html(widgetCodeHtml.replace(/period\(.*\)/, 'period('+widgetCode+')'));
   }
 
+
+
+//*****************************************
+function validateValues(type ,actId)
+//*****************************************
+{
+  var Message = "";
+  switch(type)
+  {
+					case 'del_Y_Axis':
+          {
+            for (key in myItems)
+            {
+              if (myYAxis.hasOwnProperty(myItems[key].apAssign))
+                continue;
+              // get first Axis
+              for (firstAxis in myYAxis) {  break;}
+              myItems[key].apAssign = firstAxis
+              if (Message == "")
+              { Message += "Y-Axis dissapeared -> please check Item(s) : <br><br>" }
+              Message += myItems[key].apItem + "<br>"
+            }
+            if (Message != "")
+            { Message += "<br>Y-Axis is set to : " + myYAxis[firstAxis].no }
+            break;
+          }
+          case 'del_Stack':
+          {
+            for (key in myItems)
+            {
+              if (myStackings.hasOwnProperty(myItems[key].apStack))
+                continue;
+              myItems[key].apStack = "0000"
+              if (Message == "")
+              { Message += "Stack dissapeared -> please check Item(s) : <br><br>" }
+              Message += myItems[key].apItem + "<br>"
+            }
+            if (Message != "")
+            { Message += "<br>Stack on Item is cleared " }
+            break;
+          }          
+  }
+  if (Message != "")
+  {
+    notify.message('warning', "Warning",Message);
+    ItemValue2Screen()
+  }
+}
+//*****************************************
 
 //*****************************************
 function copyWidget2Clipboard()
