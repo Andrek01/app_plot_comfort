@@ -28,14 +28,15 @@ myTimeSettings = {
 					"EndType"		: "1",
 					"EndDate"		: myDate.toJSON().slice(0, 10),
 					"EndTime"		: myDate.toJSON().slice(11, 16),
-					"Duration"		: "1d"
+					"DurationStart"	: "1d",
+					"DurationEnd"	: "2d"
 				  }
 // define first Axis
 var tmplYAxis = {}
 tmplYAxis['no']= yAxisCount
 tmplYAxis['apYmin']		= ""
 tmplYAxis['apYmax']		= ""
-tmplYAxis['apYpos']		= "1"
+tmplYAxis['apYpos']		= "0"
 tmplYAxis['apYtype']	= "linear"
 tmplYAxis['apYunit']	= ""
 newAxisID="0001"
@@ -759,10 +760,16 @@ function selectChanged(myObj)
 	  myTimeSettings.EndType = myObj.value;
 	  break;
 	}
-	case 'selDuration' :
+	case 'selDurationStart' :
 	{
-	  $('#Duration')[0].value = myObj.value;
-	  myTimeSettings.Duration = myObj.value;
+	  $('#DurationStart')[0].value = myObj.value;
+	  myTimeSettings.DurationStart = myObj.value;
+	  break;
+	}
+	case 'selDurationEnd' :
+	{
+	  $('#DurationEnd')[0].value = myObj.value;
+	  myTimeSettings.DurationEnd = myObj.value;
 	  break;
 	}
 	case 'apDataSource' :
@@ -797,7 +804,8 @@ function SetTimeSettings()
 	document.getElementById("EndDate").value= myTimeSettings.EndDate
 	document.getElementById("EndTime").value= myTimeSettings.EndTime
 	
-	document.getElementById("Duration").value= myTimeSettings.Duration
+	document.getElementById("DurationStart").value= myTimeSettings.DurationStart
+	document.getElementById("DurationEnd").value= myTimeSettings.DurationEnd
 	
 	$('#apDataSource').val(myTimeSettings.apDataSource).selectmenu('refresh');
 	setCheckRadio('btn_StartTime', 'btn_StartTime_'+ myTimeSettings.StartType)
@@ -866,7 +874,7 @@ function drawPlot(event, ui)
 	// time axis
 	if (myTimeSettings.StartType == "1")
 	{
-		var apTmin = myTimeSettings.Duration || '1d';
+		var apTmin = myTimeSettings.DurationStart || '1d';
 	}
 	else
 	{
@@ -882,10 +890,19 @@ function drawPlot(event, ui)
 	{
 		var apTmax = 'now';
 	}
-	else
+	else if (myTimeSettings.EndType == "0")
 	{
 		try {
 		var apTmax = "" + Date.parse(myTimeSettings.EndDate + " " + myTimeSettings.EndTime)
+		}
+		catch (error)
+		{
+		}
+	}
+	else if (myTimeSettings.EndType == "2")
+	{
+		try {
+		var apTmax = myTimeSettings.DurationEnd || '2d'
 		}
 		catch (error)
 		{

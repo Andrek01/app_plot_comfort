@@ -6,7 +6,7 @@
 * @license     GPL [http://www.gnu.de]
 * @version     1.0
 *
-* @title       Plot Analyser Comfort / Plot Assistant
+* @title       Plot Analyser Comfort 
 * @category    visu
 * @icon        icons/ws/measure_power_meter.svg
 * @color       #b00
@@ -154,12 +154,14 @@
           </td>
           <td>
             <div class="ui-field-contain" id="mySelect" >
-              <select id="selDuration" name="selDuration" data-native-menu="false" style="font-size:small" onchange="selectChanged(this)" >
+              <select id="selDurationStart" name="selDurationStart" data-native-menu="false" style="font-size:small" onchange="selectChanged(this)" >
                   <option value="10i">10 min.</option>
                   <option value="30i">30 min.</option>
                   <option value="1h">1 hour</option>
-                  <option value="1d" selected="selected">1 day</option>
+                  <option value="1d">1 day</option>
+				  <option value="2d" selected="selected">2 days</option>
                   <option value="7d">7 days</option>
+				  <option value="1w">1 week</option>
                   <option value="1m">1 month</option>
                   <option value="1y">1 year</option>
               </select>
@@ -167,9 +169,12 @@
           </td>
           <td>
             <label for="name"></label>
-            <input type="text" id="Duration" name="Duration"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
+            <input type="text" id="DurationStart" name="DurationStart"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
           </td>
           </tr>
+		  </table>
+		  <hr>
+		  <table style="width:100%;">
           <tr style="height:20px">
           <td>
               <label style="padding-right: 0; width: 100px;">
@@ -185,6 +190,33 @@
           <td style="width:40%">
             <label for="EndTime"></label>
             <input type="time" id="EndTime" name="EndTime" min="00:00" max="23:59" value="23:59" onchange="settingsChanged(this)"/>
+          </td>
+          </tr>
+		  <tr style="height:20px">
+          <td>
+            <label style="padding-right: 0; width: 100px;">
+              <input type="radio" id="btn_EndTime_2" name="btn_EndTime" onclick="selectChanged(this)" value="2" checked 
+                   data-val-on="1" data-val-off="0" />
+              Duration
+            </label>
+          </td>
+          <td>
+            <div class="ui-field-contain" id="mySelect" >
+              <select id="selDurationEnd" name="selDurationEnd" data-native-menu="false" style="font-size:small" onchange="selectChanged(this)" >
+                  <option value="10i">10 min.</option>
+                  <option value="30i">30 min.</option>
+                  <option value="1h">1 hour</option>
+                  <option value="1d" selected="selected">1 day</option>
+                  <option value="7d">7 days</option>
+				  <option value="1w">1 week</option>
+                  <option value="1m">1 month</option>
+                  <option value="1y">1 year</option>
+              </select>
+            </div>
+          </td>
+          <td>
+            <label for="name"></label>
+            <input type="text" id="DurationEnd" name="DurationEnd"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
           </td>
           </tr>
           <tr style="height:20px">
