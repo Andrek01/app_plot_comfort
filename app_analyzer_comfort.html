@@ -158,8 +158,8 @@
                   <option value="10i">10 min.</option>
                   <option value="30i">30 min.</option>
                   <option value="1h">1 hour</option>
-                  <option value="1d">1 day</option>
-				  <option value="2d" selected="selected">2 days</option>
+                  <option value="1d" selected="selected">1 day</option>
+				  <option value="2d">2 days</option>
                   <option value="7d">7 days</option>
 				  <option value="1w">1 week</option>
                   <option value="1m">1 month</option>
@@ -195,7 +195,7 @@
 		  <tr style="height:20px">
           <td>
             <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_EndTime_2" name="btn_EndTime" onclick="selectChanged(this)" value="2" checked 
+              <input type="radio" id="btn_EndTime_1" name="btn_EndTime" onclick="selectChanged(this)" value="1" checked 
                    data-val-on="1" data-val-off="0" />
               Duration
             </label>
@@ -203,10 +203,11 @@
           <td>
             <div class="ui-field-contain" id="mySelect" >
               <select id="selDurationEnd" name="selDurationEnd" data-native-menu="false" style="font-size:small" onchange="selectChanged(this)" >
-                  <option value="10i">10 min.</option>
+                  <option value="now" selected="selected">now</option>
+				  <option value="10i">10 min.</option>
                   <option value="30i">30 min.</option>
                   <option value="1h">1 hour</option>
-                  <option value="1d" selected="selected">1 day</option>
+                  <option value="1d">1 day</option>
                   <option value="7d">7 days</option>
 				  <option value="1w">1 week</option>
                   <option value="1m">1 month</option>
@@ -219,21 +220,8 @@
             <input type="text" id="DurationEnd" name="DurationEnd"  minlength="2" maxlength="8" size="10" value="1d" onchange="settingsChanged(this)"/>
           </td>
           </tr>
-          <tr style="height:20px">
-          <td>
-            <label style="padding-right: 0; width: 100px;">
-              <input type="radio" id="btn_EndTime_1" name="btn_EndTime" onclick="selectChanged(this)" value="1" checked
-                   data-val-on="1" data-val-off="0" onchange="settingsChanged(this)"/>
-              Now
-            </label>
-          </td>
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
         </table>
-        </fieldset>
+		</fieldset>
 				</form>
 			</div>
 		<!-- End - Tab One - Time-Axis-Settings -->
@@ -265,6 +253,27 @@
 				  <label for="apChartopts">Chart options</label>
 				  <input id="apChartopts" onchange="myChartOptions=this.value"/>
 				</div>
+				<hr>
+				<!--
+				<table style="width:100%;">
+				<tr style="height:20px">
+				<td>
+				 Zoom-Options
+				</td>
+				<td>
+					<div class="ui-field-contain">
+					<select id="selZoomOptions" name="selZoomOptions" data-native-menu="false" style="font-size:small" onchange="selectChanged(this)" >
+					  <option value=" " selected="selected">&nbsp;</option>
+					  <option value="day">day</option>
+					  <option value="advanced">advanced</option>
+					</select>
+					</div>
+				</td>
+				<td></td>
+				</tr>
+				</table>		
+				<hr>
+				-->
 				<h2>Stacks</h2>
 				<hr>
 				<div id="StackSettings">

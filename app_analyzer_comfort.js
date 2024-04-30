@@ -29,7 +29,8 @@ myTimeSettings = {
 					"EndDate"		: myDate.toJSON().slice(0, 10),
 					"EndTime"		: myDate.toJSON().slice(11, 16),
 					"DurationStart"	: "1d",
-					"DurationEnd"	: "2d"
+					"DurationEnd"	: "now",
+					"ZoomOptions"   : "advanced"
 				  }
 // define first Axis
 var tmplYAxis = {}
@@ -778,6 +779,13 @@ function selectChanged(myObj)
 	  SetSelectItem();
 	  break;
 	}
+	case 'selZoomOptions' :
+	{
+	  myTimeSettings.ZoomOptions  = myObj.value;
+	  SetSelectItem();
+	  break;
+	}
+	
   }
  isItem = myObj.id.search("apItem-") == 0 ? true : false
  if (isItem)
@@ -807,7 +815,14 @@ function SetTimeSettings()
 	document.getElementById("DurationStart").value= myTimeSettings.DurationStart
 	document.getElementById("DurationEnd").value= myTimeSettings.DurationEnd
 	
+	document.getElementById("apChartopts").value= myChartOptions
+	
+	// $('#selZoomOptions').val(myTimeSettings.ZoomOptions).selectmenu('refresh');
+	
+	
 	$('#apDataSource').val(myTimeSettings.apDataSource).selectmenu('refresh');
+	
+	
 	setCheckRadio('btn_StartTime', 'btn_StartTime_'+ myTimeSettings.StartType)
 	setCheckRadio('btn_EndTime'	 , 'btn_EndTime_'  + myTimeSettings.StartType)
 	//$('#StartDate').prop('disabled',true);
@@ -886,11 +901,8 @@ function drawPlot(event, ui)
 		}
 	}
 	
-	if (myTimeSettings.EndType == "1")
-	{
-		var apTmax = 'now';
-	}
-	else if (myTimeSettings.EndType == "0")
+	
+	if (myTimeSettings.EndType == "0")
 	{
 		try {
 		var apTmax = "" + Date.parse(myTimeSettings.EndDate + " " + myTimeSettings.EndTime)
@@ -899,10 +911,10 @@ function drawPlot(event, ui)
 		{
 		}
 	}
-	else if (myTimeSettings.EndType == "2")
+	else
 	{
 		try {
-		var apTmax = myTimeSettings.DurationEnd || '2d'
+		var apTmax = myTimeSettings.DurationEnd || 'now'
 		}
 		catch (error)
 		{
@@ -932,10 +944,12 @@ function drawPlot(event, ui)
 	var apChartopts = myChartOptions;
 	if (apChartopts != undefined && apChartopts != '')
 	{
-	  try {that.options.chartOptions = JSON.parse(apChartopts);} 
+	  try {eval('(' + apChartopts + ')');;} 
 	  catch(error)
 	  {
-		notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {"rangeSelector":{"selected":"2"}}');
+		notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {rangeSelector : { selected : 2 }} <br><br>' + 
+								'Error-Message : <br>' + error.message);
+		apChartopts = ""
 	  }
 	}
 
@@ -1013,7 +1027,11 @@ function drawPlot(event, ui)
 	that.options.unit = apYunit;
 	plot.attr('data-chart-options', apChartopts);
 	if (apChartopts != undefined && apChartopts != ''){
-	  try {that.options.chartOptions = JSON.parse(apChartopts);} 
+	  try {
+		  //that.options.chartOptions = JSON.parse(apChartopts);
+		  objChartOptions = eval('(' + apChartopts + ')');
+		  $.extend(true, that.options, objChartOptions);
+		  } 
 	  catch(error){notify.message('error', 'No valid JSON', 'please use quotes for the individual properties, e.g. {"rangeSelector":{"selected":"2"}}');}
 	}
 	
